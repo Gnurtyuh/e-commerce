@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 @Table(name ="users")
 @FieldDefaults(level = AccessLevel.PRIVATE)

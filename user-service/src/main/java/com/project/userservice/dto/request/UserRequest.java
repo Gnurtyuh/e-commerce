@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class UserRequest {
     String fullName;

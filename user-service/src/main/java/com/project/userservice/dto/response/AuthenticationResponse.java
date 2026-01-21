@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class AuthenticationResponse {
     String token;
