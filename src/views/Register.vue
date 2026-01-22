@@ -43,6 +43,10 @@
                                 <p>Email<span>*</span></p>
                                 <input type="email" v-model="form.email" required />
                             </div>
+                            <div class="checkout__input">
+                              <p>phone<span>*</span></p>
+                              <input type="text" v-model="form.phone" required />
+                            </div>
 
                             <div class="checkout__input">
                                 <p>Password<span>*</span></p>
@@ -73,23 +77,66 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive } from "vue";
+import axios from "axios";
 
 const form = reactive({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-})
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  phone:""
+});
 
-const handleRegister = () => {
-    if (form.password !== form.confirmPassword) {
-        alert('Passwords do not match')
-        return
-    }
+const handleRegister = async () => {
+  if (
+      !form.firstName ||
+      !form.lastName ||
+      !form.email ||
+      !form.password ||
+      !form.confirmPassword||
+      !form.phone
+  ) {
+    alert("Please fill in all required fields");
+    return;
+  }
 
-    console.log('Register data:', form)
-    // gọi API sau
-}
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+        "http://localhost:8080/users/auth/registry",
+        {
+          email: form.email,
+          password: form.password,
+          phone: form.phone,
+          fullName: `${form.firstName} ${form.lastName}`
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+    );
+
+    console.log("Register success:", res.data);
+    alert("Register successful! Please check your email to verify.");
+
+    // reset form
+    form.firstName = "";
+    form.lastName = "";
+    form.email = "";
+    form.password = "";
+    form.phone = "";
+    form.confirmPassword = "";
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert(err.response?.data?.message || "Register failed");
+  }
+};
 </script>

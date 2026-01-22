@@ -50,17 +50,46 @@
         </div>
     </section>
 </template>
-
 <script setup>
-import { reactive } from 'vue'
+import { reactive } from "vue";
+import axios from "axios";
 
 const form = reactive({
-    email: '',
-    password: ''
-})
+  email: "",
+  password: ""
+});
 
-const handleLogin = () => {
-    console.log('Login data:', form)
-    // gọi API sau
-}
+const handleLogin = async () => {
+  if (!form.email || !form.password) {
+    alert("Please enter email and password");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+        "http://localhost:8080/users/auth/login",
+        {
+          email: form.email,
+          password: form.password
+        },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+    );
+
+    console.log("Login success:", res.data);
+    localStorage.setItem("role", res.data.role);
+
+    // ví dụ backend trả accessToken
+    localStorage.setItem("token", res.data.token);
+
+    alert("Login successful");
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
 </script>
