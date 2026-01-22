@@ -10,33 +10,60 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public UserResponse createUser(UserRequest user) {
+
+
+
+    public void createUser(UserRequest user) {
         String password = passwordEncoder.encode(user.getPassword());
         user.setPassword(password);
-        Users users =userRepository.save(userMapper.toUsers(user));
-        return userMapper.toUserResponse(users);
+        user.setRole("USER");
+        Users users = userMapper.toUsers(user);
+        users.setStatus("PENDING");
+        users.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        users.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(users);
     }
-    public UserResponse updateUser(UserRequest user) {
-        if(findByEmail(user.getEmail()) ==null )
+    public UserResponse updateUser(UserRequest request) {
+        Users user = findByEmail(request.getEmail()) ;
+        if(user ==null )
             throw new UsernameNotFoundException("User not found");
-        Users users = userRepository.save(userMapper.toUsers(user));
-        return userMapper.toUserResponse(users);
+        user.setFullName(request.getFullName());
+        user.setPhone(request.getPhone());
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        return toUserResponse(user);
+    }
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        Users users = findByEmail(email);
+        if(users ==null )
+            throw new UsernameNotFoundException("User not found");
+        if(!passwordEncoder.matches(oldPassword, users.getPassword()))
+            throw new UsernameNotFoundException("password not match");
+        users.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(users);
     }
     public UserResponse info(String email) {
         Users user = findByEmail(email);
-        return userMapper.toUserResponse(user);
+        return toUserResponse(user);
     }
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    public UserResponse toUserResponse(Users user) {
+        return userMapper.toUserResponse(user);
+    }
+    public Users toUsers(UserRequest user) {
+        return userMapper.toUsers(user);
+    }
 }
+

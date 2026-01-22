@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Builder
 public class AuthenticationResponse {
     String token;
+    String refreshToken;
     String role;
 }

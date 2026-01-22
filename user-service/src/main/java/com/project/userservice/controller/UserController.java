@@ -11,16 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/users/user")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
     @Autowired
     UserService userService;
-    @PostMapping("/registry")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
-        var result = userService.createUser(user);
-        return ResponseEntity.ok(result);
-    }
+
     @PostMapping("")
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) {
         var result = userService.updateUser(user);

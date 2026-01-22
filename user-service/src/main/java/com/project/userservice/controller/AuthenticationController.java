@@ -6,23 +6,20 @@ import com.project.userservice.dto.response.AuthenticationResponse;
 import com.project.userservice.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users/auth")
 public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         var result = authenticationService.login(authenticationRequest);
         return ResponseEntity.ok(result);
     }
-    @GetMapping("registry")
-    public ResponseEntity<?> registry(@RequestBody UserRequest userRequest) {
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody UserRequest userRequest) {
         authenticationService.register(userRequest);
         return ResponseEntity.ok().build();
     }
