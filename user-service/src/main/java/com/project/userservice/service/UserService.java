@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -33,6 +35,12 @@ public class UserService {
         users.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(users);
     }
+    public void activeUser(String email) {
+        Users user = findByEmail(email);
+        user.setStatus("ACTIVE");
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+    }
     public UserResponse updateUser(UserRequest request) {
         Users user = findByEmail(request.getEmail()) ;
         if(user ==null )
@@ -40,7 +48,7 @@ public class UserService {
         user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        return toUserResponse(user);
+        return userMapper.toUserResponse(user);
     }
     public void changePassword(String email, String oldPassword, String newPassword) {
         Users users = findByEmail(email);
@@ -64,6 +72,12 @@ public class UserService {
     }
     public Users toUsers(UserRequest user) {
         return userMapper.toUsers(user);
+    }
+    public List<UserResponse> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(users -> userMapper.toUserResponse(users))
+                .toList();
     }
 }
 

@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class UserResponse {
-    UUID id;
+    UUID userId;
     String fullName;
     String email;
     String phone;
