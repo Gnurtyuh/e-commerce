@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users/user")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -27,4 +29,10 @@ public class UserController {
         var result = userService.info(email);
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        var result = userService.getAll();
+        return ResponseEntity.ok(result);
+    }
+
 }

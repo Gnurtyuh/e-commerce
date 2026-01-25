@@ -20,7 +20,7 @@ public class UserMapper {
     }
     public UserResponse toUserResponse(Users user) {
         UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getUserId());
+        userResponse.setUserId(user.getUserId());
         userResponse.setFullName(user.getFullName());
         userResponse.setEmail(user.getEmail());
         userResponse.setPhone(user.getPhone());

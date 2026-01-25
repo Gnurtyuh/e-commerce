@@ -3,6 +3,7 @@ package com.project.userservice.service;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.project.userservice.dto.request.AuthenticationRequest;
+import com.project.userservice.dto.request.ChangePasswordRequest;
 import com.project.userservice.dto.request.UserRequest;
 import com.project.userservice.dto.response.AuthenticationResponse;
 import lombok.AccessLevel;
@@ -41,5 +42,5 @@ public class AuthenticationService {
     public void register(UserRequest userRequest) {
         userService.createUser(userRequest);
     }
-
+    public void changePassword(ChangePasswordRequest request) { userService.changePassword(request); }
 }

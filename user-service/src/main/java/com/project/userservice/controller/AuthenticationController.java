@@ -1,6 +1,7 @@
 package com.project.userservice.controller;
 
 import com.project.userservice.dto.request.AuthenticationRequest;
+import com.project.userservice.dto.request.ChangePasswordRequest;
 import com.project.userservice.dto.request.UserRequest;
 import com.project.userservice.dto.response.AuthenticationResponse;
 import com.project.userservice.service.AuthenticationService;
@@ -18,9 +19,14 @@ public class AuthenticationController {
         var result = authenticationService.login(authenticationRequest);
         return ResponseEntity.ok(result);
     }
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRequest userRequest) {
         authenticationService.register(userRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("register successfully");
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        authenticationService.changePassword(changePasswordRequest);
+        return ResponseEntity.ok("password changed successfully");
     }
 }

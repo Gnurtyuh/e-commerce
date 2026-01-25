@@ -1,5 +1,6 @@
 package com.project.userservice.service;
 
+import com.project.userservice.dto.request.ChangePasswordRequest;
 import com.project.userservice.dto.request.UserRequest;
 import com.project.userservice.dto.response.UserResponse;
 import com.project.userservice.entity.Users;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,18 +52,21 @@ public class UserService {
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return userMapper.toUserResponse(user);
     }
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        Users users = findByEmail(email);
-        if(users ==null )
+    public void changePassword(ChangePasswordRequest request) {
+        Users users = findByEmail(request.getEmail());
+        if(users == null )
             throw new UsernameNotFoundException("User not found");
-        if(!passwordEncoder.matches(oldPassword, users.getPassword()))
+        if(!passwordEncoder.matches(request.getOldPassword(), users.getPassword()))
             throw new UsernameNotFoundException("password not match");
-        users.setPassword(passwordEncoder.encode(newPassword));
+        users.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(users);
     }
     public UserResponse info(String email) {
         Users user = findByEmail(email);
         return toUserResponse(user);
+    }
+    public Users findByUserId(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -73,7 +78,7 @@ public class UserService {
     public Users toUsers(UserRequest user) {
         return userMapper.toUsers(user);
     }
-    public List<UserResponse> findAll() {
+    public List<UserResponse> getAll() {
         return userRepository.findAll()
                 .stream()
                 .map(users -> userMapper.toUserResponse(users))
