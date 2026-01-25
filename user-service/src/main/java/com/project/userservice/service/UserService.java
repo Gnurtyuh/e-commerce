@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -27,15 +26,23 @@ public class UserService {
 
 
 
-    public void createUser(UserRequest user) {
-        String password = passwordEncoder.encode(user.getPassword());
-        user.setPassword(password);
-        user.setRole("USER");
-        Users users = userMapper.toUsers(user);
-        users.setStatus("PENDING");
-        users.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        users.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        userRepository.save(users);
+    public void createUser(UserRequest request) {
+        Users users = findByEmail(request.getEmail());
+        if (users != null && users.getStatus().equals("ACTIVE")) {
+            throw new UsernameNotFoundException("Email already in use");
+        }
+        if (users != null) {
+            updateUser(request);
+            return;
+        }
+        String password = passwordEncoder.encode(request.getPassword());
+        request.setPassword(password);
+        request.setRole("USER");
+        Users user = userMapper.toUsers(request);
+        user.setStatus("PENDING");
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
     }
     public void activeUser(String email) {
         Users user = findByEmail(email);
@@ -43,14 +50,14 @@ public class UserService {
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
     }
-    public UserResponse updateUser(UserRequest request) {
+    public void updateUser(UserRequest request) {
         Users user = findByEmail(request.getEmail()) ;
         if(user ==null )
             throw new UsernameNotFoundException("User not found");
         user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        return userMapper.toUserResponse(user);
+        userRepository.save(user);
     }
     public void changePassword(ChangePasswordRequest request) {
         Users users = findByEmail(request.getEmail());
@@ -71,7 +78,12 @@ public class UserService {
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
+    public String getStatus(String email) {
+        Users user = findByEmail(email);
+        if(user ==null )
+            throw new UsernameNotFoundException("User not found");
+        return user.getStatus();
+    }
     public UserResponse toUserResponse(Users user) {
         return userMapper.toUserResponse(user);
     }

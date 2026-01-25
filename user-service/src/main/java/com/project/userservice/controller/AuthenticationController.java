@@ -29,4 +29,9 @@ public class AuthenticationController {
         authenticationService.changePassword(changePasswordRequest);
         return ResponseEntity.ok("password changed successfully");
     }
+    @GetMapping("/status")
+    public ResponseEntity<?> getStatus(@RequestParam String email) {
+        var result = authenticationService.getStatus(email);
+        return ResponseEntity.ok(result);
+    }
 }

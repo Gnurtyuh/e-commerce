@@ -43,4 +43,9 @@ public class AuthenticationService {
         userService.createUser(userRequest);
     }
     public void changePassword(ChangePasswordRequest request) { userService.changePassword(request); }
+
+    public String getStatus(String email) {
+
+        return userService.getStatus(email);
+    }
 }

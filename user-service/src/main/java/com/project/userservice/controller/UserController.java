@@ -20,9 +20,9 @@ public class UserController {
     UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) {
-        var result = userService.updateUser(user);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> updateUser(@RequestBody UserRequest user) {
+        userService.updateUser(user);
+        return ResponseEntity.ok("Update user successful");
     }
     @GetMapping("/info")
     public ResponseEntity<UserResponse> info(String email) {
