@@ -53,6 +53,7 @@
 <script setup>
 import { reactive } from "vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
 const form = reactive({
   email: "",
@@ -66,6 +67,42 @@ const handleLogin = async () => {
   }
 
   try {
+    const statusRes = await axios.get(
+        "http://localhost:8080/users/auth/status?email=" + form.email,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+    );
+    const status = statusRes.data;
+    if (status !== "ACTIVE") {
+      alert("Account not activated. Please verify OTP." +status);
+
+      // Chuyển sang trang verify OTP và truyền email qua query params
+      await router.push({
+        path: '/verify',
+        query: {email: form.email}
+      });
+      try {
+        // Gọi API resend OTP
+        await axios.post(
+            'http://localhost:8080/users/otp/send?email=' + form.email ,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            }
+        );
+
+        alert('OTP has been resent to your email!');
+
+      } catch (err) {
+        console.error(err.response?.data || err.message);
+        alert(err.response?.data?.message || 'Failed to resend OTP');
+      }
+      return;
+    }
     const res = await axios.post(
         "http://localhost:8080/users/auth/login",
         {
@@ -89,7 +126,7 @@ const handleLogin = async () => {
 
   } catch (err) {
     console.error(err.response?.data || err.message);
-    alert(err.response?.data?.message || "Login failed");
+    alert("Email hoặc password không đúng "+err.response?.data?.message || "Login failed");
   }
 };
 </script>

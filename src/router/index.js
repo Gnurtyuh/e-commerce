@@ -53,7 +53,7 @@ const routes = [
     component: () => import("@/views/Register.vue"),
   },
   {
-    path: "/verify-otp",
+    path: "/verify",
     name: "VerifyOtp",
     component: () => import("@/views/VerifyOtp.vue"),
   },

@@ -43,6 +43,10 @@
                                 <p>Email<span>*</span></p>
                                 <input type="email" v-model="form.email" required />
                             </div>
+                            <div class="checkout__input">
+                              <p>phone<span>*</span></p>
+                              <input type="text" v-model="form.phone" required />
+                            </div>
 
                             <div class="checkout__input">
                                 <p>Password<span>*</span></p>
@@ -71,47 +75,81 @@
         </div>
     </section>
 </template>
-
 <script setup>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
-const router = useRouter()
+const router = useRouter();
 
 const form = reactive({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-})
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  phone: ""
+});
 
 const handleRegister = async () => {
-    if (!form.email || !form.password) {
-        alert('Please fill all required fields')
-        return
-    }
+  if (
+      !form.firstName ||
+      !form.lastName ||
+      !form.email ||
+      !form.password ||
+      !form.confirmPassword ||
+      !form.phone
+  ) {
+    alert("Please fill in all required fields");
+    return;
+  }
 
-    if (form.password !== form.confirmPassword) {
-        alert('Passwords do not match')
-        return
-    }
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
 
-    try {
-        // 🔥 MOCK API REGISTER
-        console.log('Register data:', form)
+  try {
+    const res = await axios.post(
+        "http://localhost:8080/users/auth/register",
+        {
+          email: form.email,
+          password: form.password,
+          phone: form.phone,
+          fullName: `${form.firstName} ${form.lastName}`
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+    );
 
-        // giả lập gửi OTP thành công
-        setTimeout(() => {
-            router.push({
-                path: '/verify-otp',
-                query: { email: form.email }
-            })
-        }, 500)
+    console.log("Register success:", res.data);
+    alert("Register successful! Please check your email to verify.");
 
-    } catch (error) {
-        console.error(error)
-        alert('Register failed')
-    }
-}
+    // Chuyển sang trang verify OTP và truyền email qua query params
+    await router.push({
+      path: '/verify',
+      query: {email: form.email}
+    });
+
+      // Gọi API resend OTP
+    await axios.post(
+        'http://localhost:8080/users/otp/send?email=' + form.email ,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+    );
+
+    alert('OTP has been resent to your email!');
+
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert(err.response?.data?.message || "Register failed");
+  }
+};
 </script>
