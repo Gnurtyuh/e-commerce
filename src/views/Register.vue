@@ -43,10 +43,6 @@
                                 <p>Email<span>*</span></p>
                                 <input type="email" v-model="form.email" required />
                             </div>
-                            <div class="checkout__input">
-                              <p>phone<span>*</span></p>
-                              <input type="text" v-model="form.phone" required />
-                            </div>
 
                             <div class="checkout__input">
                                 <p>Password<span>*</span></p>
@@ -77,66 +73,45 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
-import axios from "axios";
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const form = reactive({
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-  phone:""
-});
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+})
 
 const handleRegister = async () => {
-  if (
-      !form.firstName ||
-      !form.lastName ||
-      !form.email ||
-      !form.password ||
-      !form.confirmPassword||
-      !form.phone
-  ) {
-    alert("Please fill in all required fields");
-    return;
-  }
+    if (!form.email || !form.password) {
+        alert('Please fill all required fields')
+        return
+    }
 
-  if (form.password !== form.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
+    if (form.password !== form.confirmPassword) {
+        alert('Passwords do not match')
+        return
+    }
 
-  try {
-    const res = await axios.post(
-        "http://localhost:8080/users/auth/registry",
-        {
-          email: form.email,
-          password: form.password,
-          phone: form.phone,
-          fullName: `${form.firstName} ${form.lastName}`
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-    );
+    try {
+        // 🔥 MOCK API REGISTER
+        console.log('Register data:', form)
 
-    console.log("Register success:", res.data);
-    alert("Register successful! Please check your email to verify.");
+        // giả lập gửi OTP thành công
+        setTimeout(() => {
+            router.push({
+                path: '/verify-otp',
+                query: { email: form.email }
+            })
+        }, 500)
 
-    // reset form
-    form.firstName = "";
-    form.lastName = "";
-    form.email = "";
-    form.password = "";
-    form.phone = "";
-    form.confirmPassword = "";
-
-  } catch (err) {
-    console.error(err.response?.data || err.message);
-    alert(err.response?.data?.message || "Register failed");
-  }
-};
+    } catch (error) {
+        console.error(error)
+        alert('Register failed')
+    }
+}
 </script>
