@@ -74,6 +74,9 @@
 
 <script setup>
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const form = reactive({
     firstName: '',
@@ -83,13 +86,32 @@ const form = reactive({
     confirmPassword: ''
 })
 
-const handleRegister = () => {
+const handleRegister = async () => {
+    if (!form.email || !form.password) {
+        alert('Please fill all required fields')
+        return
+    }
+
     if (form.password !== form.confirmPassword) {
         alert('Passwords do not match')
         return
     }
 
-    console.log('Register data:', form)
-    // gọi API sau
+    try {
+        // 🔥 MOCK API REGISTER
+        console.log('Register data:', form)
+
+        // giả lập gửi OTP thành công
+        setTimeout(() => {
+            router.push({
+                path: '/verify-otp',
+                query: { email: form.email }
+            })
+        }, 500)
+
+    } catch (error) {
+        console.error(error)
+        alert('Register failed')
+    }
 }
 </script>

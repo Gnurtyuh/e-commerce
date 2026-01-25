@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HeroSearch />
     <Breadcrumb title="Shop Grid" />
 
     <!-- Product Section Begin -->
@@ -25,15 +26,22 @@
                   <p>Price: ${{ priceRange[0] }} - ${{ priceRange[1] }}</p>
                 </div>
               </div>
+
+              <!-- POPULAR SIZE -->
+              <PopularSizeFilter />
+              <!-- LATEST PRODUCTS -->
+              <LatestProductsSlider :products="latestProducts" />
+
             </div>
           </div>
           <div class="col-lg-9 col-md-7">
+            <SaleOffSlider :products="saleProducts" />
             <div class="filter__item">
               <div class="row">
                 <div class="col-lg-4 col-md-5">
                   <div class="filter__sort">
                     <span>Sort By</span>
-                    <select v-model="sortBy">
+                    <select v-model="sortBy" style="margin-left: 15px; border: none; font-weight: bold;">
                       <option value="default">Default</option>
                       <option value="price-low">Price: Low to High</option>
                       <option value="price-high">Price: High to Low</option>
@@ -48,11 +56,7 @@
               </div>
             </div>
             <div class="row">
-              <ProductCard 
-                v-for="product in sortedProducts" 
-                :key="product.id" 
-                :product="product" 
-              />
+              <ProductCard v-for="product in sortedProducts" :key="product.id" :product="product" />
             </div>
             <div class="product__pagination">
               <a href="#" class="active">1</a>
@@ -70,21 +74,28 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Breadcrumb from '@/components/layout/Breadcrumb.vue'
+import HeroSearch from '@/components/layout/HeroSearch.vue'
 import ProductCard from '@/components/ui/ProductCard.vue'
+import SaleOffSlider from '@/components/ui/SaleOffSlider.vue'
+import PopularSizeFilter from '@/components/ui/PopularSizeFilter.vue'
+import LatestProductsSlider from '@/components/ui/LatestProductsSlider.vue'
+import { saleProducts } from '@/data/saleProducts'
 import { products } from '@/data/products'
+import { latestProducts } from '@/data/latestProducts'
+
 
 const sortBy = ref('default')
 const priceRange = ref([0, 100])
 
 const sortedProducts = computed(() => {
   let result = [...products]
-  
+
   if (sortBy.value === 'price-low') {
     result.sort((a, b) => a.price - b.price)
   } else if (sortBy.value === 'price-high') {
     result.sort((a, b) => b.price - a.price)
   }
-  
+
   return result
 })
 </script>
