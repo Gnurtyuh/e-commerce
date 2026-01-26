@@ -1,11 +1,12 @@
 <template>
   <div>
-    <Breadcrumb title="Shop Details" />
+    <Breadcrumb title="Chi tiết sản phẩm" />
 
     <!-- Product Details Section Begin -->
     <section class="product-details spad" v-if="product">
       <div class="container">
         <div class="row">
+          <!-- Hình ảnh -->
           <div class="col-lg-6 col-md-6">
             <div class="product__details__pic">
               <div class="product__details__pic__item">
@@ -13,15 +14,23 @@
               </div>
             </div>
           </div>
+
+          <!-- Thông tin -->
           <div class="col-lg-6 col-md-6">
             <div class="product__details__text">
               <h3>{{ product.name }}</h3>
+
               <div class="product__details__rating">
                 <i class="fa fa-star" v-for="n in 5" :key="n"></i>
-                <span>(18 reviews)</span>
+                <span>(18 đánh giá)</span>
               </div>
-              <div class="product__details__price">${{ product.price.toFixed(2) }}</div>
+
+              <div class="product__details__price">
+                ${{ product.price.toFixed(2) }}
+              </div>
+
               <p>{{ product.description }}</p>
+
               <div class="product__details__quantity">
                 <div class="quantity">
                   <div class="pro-qty">
@@ -31,12 +40,31 @@
                   </div>
                 </div>
               </div>
-              <a href="#" class="primary-btn" @click.prevent="handleAddToCart">ADD TO CART</a>
-              <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a>
+
+              <a href="#" class="primary-btn" @click.prevent="handleAddToCart">
+                THÊM VÀO GIỎ
+              </a>
+
+              <a href="#" class="heart-icon">
+                <i class="fa fa-heart"></i>
+              </a>
+
               <ul>
-                <li><b>Availability</b> <span>In Stock ({{ product.stock }} items)</span></li>
-                <li><b>Shipping</b> <span>01 day shipping. <span>Free pickup today</span></span></li>
-                <li><b>Weight</b> <span>0.5 kg</span></li>
+                <li>
+                  <b>Tình trạng</b>
+                  <span>Còn hàng ({{ product.stock }} sản phẩm)</span>
+                </li>
+                <li>
+                  <b>Giao hàng</b>
+                  <span>
+                    Giao trong 1 ngày.
+                    <span>Nhận tại cửa hàng miễn phí hôm nay</span>
+                  </span>
+                </li>
+                <li>
+                  <b>Trọng lượng</b>
+                  <span>0.5 kg</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -51,22 +79,20 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="section-title related__product__title">
-              <h2>Related Product</h2>
+              <h2>Sản phẩm liên quan</h2>
             </div>
           </div>
         </div>
+
         <div class="row">
-          <ProductCard 
-            v-for="product in relatedProducts" 
-            :key="product.id" 
-            :product="product" 
-          />
+          <ProductCard v-for="product in relatedProducts" :key="product.id" :product="product" />
         </div>
       </div>
     </section>
     <!-- Related Product Section End -->
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed } from 'vue'
@@ -87,7 +113,13 @@ const product = computed(() => {
 
 const relatedProducts = computed(() => {
   if (!product.value) return []
-  return products.filter(p => p.category === product.value.category && p.id !== product.value.id).slice(0, 4)
+  return products
+    .filter(
+      p =>
+        p.category === product.value.category &&
+        p.id !== product.value.id
+    )
+    .slice(0, 4)
 })
 
 const increaseQuantity = () => {
@@ -103,7 +135,10 @@ const decreaseQuantity = () => {
 const handleAddToCart = () => {
   if (product.value) {
     addToCart(product.value, quantity.value)
-    alert(`${quantity.value} x ${product.value.name} added to cart!`)
+    alert(
+      `Đã thêm ${quantity.value} x ${product.value.name} vào giỏ hàng!`
+    )
   }
 }
 </script>
+

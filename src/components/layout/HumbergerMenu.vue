@@ -1,72 +1,101 @@
 <template>
-  <!-- Humberger Menu Overlay -->
+  <!-- Overlay -->
   <div class="humberger__menu__overlay" @click="closeMobileMenu"></div>
-  
-  <!-- Humberger Menu Wrapper -->
+
+  <!-- Wrapper -->
   <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
       <router-link to="/" @click="closeMobileMenu">
         <img src="/img/logo.png" alt="Ogani">
       </router-link>
     </div>
-    
+
+    <!-- Cart -->
     <div class="humberger__menu__cart">
       <ul>
-        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+        <li>
+          <a href="#">
+            <i class="fa fa-heart"></i>
+            <span>1</span>
+          </a>
+        </li>
         <li>
           <router-link to="/cart" @click="closeMobileMenu">
-            <i class="fa fa-shopping-bag"></i> <span>{{ cartCount }}</span>
+            <i class="fa fa-shopping-bag"></i>
+            <span>{{ cartCount }}</span>
           </router-link>
         </li>
       </ul>
-      <div class="header__cart__price">item: <span>${{ cartTotal.toFixed(2) }}</span></div>
+      <div class="header__cart__price">
+        Tổng tiền:
+        <span>${{ cartTotal.toFixed(2) }}</span>
+      </div>
     </div>
-    
+
+    <!-- Widget -->
     <div class="humberger__menu__widget">
       <div class="header__top__right__language">
         <img src="/img/language.png" alt="">
-        <div>English</div>
+        <div>Tiếng Anh</div>
         <span class="arrow_carrot-down"></span>
         <ul>
-          <li><a href="#">Spanish</a></li>
-          <li><a href="#">English</a></li>
+          <li><a href="#">Tiếng Tây Ban Nha</a></li>
+          <li><a href="#">Tiếng Anh</a></li>
         </ul>
       </div>
+
       <div class="header__top__right__auth">
-        <a href="#"><i class="fa fa-user"></i> Login</a>
+        <router-link to="/login" @click="closeMobileMenu">
+          <i class="fa fa-user"></i> Đăng nhập
+        </router-link>
       </div>
     </div>
-    
+
+    <!-- Menu -->
     <nav class="humberger__menu__nav mobile-menu">
       <ul>
         <li :class="{ active: currentRoute === '/' }">
-          <router-link to="/" @click="closeMobileMenu">Home</router-link>
+          <router-link to="/" @click="closeMobileMenu">
+            Trang chủ
+          </router-link>
         </li>
         <li :class="{ active: currentRoute === '/shop' }">
-          <router-link to="/shop" @click="closeMobileMenu">Shop</router-link>
+          <router-link to="/shop" @click="closeMobileMenu">
+            Cửa hàng
+          </router-link>
         </li>
         <li :class="{ active: currentRoute.includes('/blog') }">
-          <router-link to="/blog" @click="closeMobileMenu">Blog</router-link>
+          <router-link to="/blog" @click="closeMobileMenu">
+            Blog
+          </router-link>
         </li>
         <li :class="{ active: currentRoute === '/contact' }">
-          <router-link to="/contact" @click="closeMobileMenu">Contact</router-link>
+          <router-link to="/contact" @click="closeMobileMenu">
+            Liên hệ
+          </router-link>
         </li>
       </ul>
     </nav>
-    
+
     <div id="mobile-menu-wrap"></div>
-    
+
+    <!-- Social -->
     <div class="header__top__right__social">
       <a href="#"><i class="fa fa-facebook"></i></a>
       <a href="#"><i class="fa fa-twitter"></i></a>
       <a href="#"><i class="fa fa-linkedin"></i></a>
       <a href="#"><i class="fa fa-pinterest-p"></i></a>
     </div>
-    
+
+    <!-- Contact -->
     <div class="humberger__menu__contact">
       <ul>
-        <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-        <li>Free Shipping for all Order of $99</li>
+        <li>
+          <i class="fa fa-envelope"></i> hello@colorlib.com
+        </li>
+        <li>
+          Miễn phí vận chuyển cho đơn hàng từ $99
+        </li>
       </ul>
     </div>
   </div>
@@ -83,7 +112,12 @@ const { cartCount, cartTotal } = useCart()
 const currentRoute = computed(() => route.path)
 
 const closeMobileMenu = () => {
-  document.querySelector('.humberger__menu__wrapper')?.classList.remove('show__humberger__menu__wrapper')
-  document.querySelector('.humberger__menu__overlay')?.classList.remove('active')
+  document
+    .querySelector('.humberger__menu__wrapper')
+    ?.classList.remove('show__humberger__menu__wrapper')
+
+  document
+    .querySelector('.humberger__menu__overlay')
+    ?.classList.remove('active')
 }
 </script>

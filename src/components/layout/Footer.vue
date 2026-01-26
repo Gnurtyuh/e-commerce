@@ -2,46 +2,58 @@
   <footer class="footer spad">
     <div class="container">
       <div class="row">
+        <!-- Giới thiệu -->
         <div class="col-lg-3 col-md-6 col-sm-6">
           <div class="footer__about">
             <div class="footer__about__logo">
-              <router-link to="/"><img src="/img/logo.png" alt="Ogani"></router-link>
+              <router-link to="/">
+                <img src="/img/logo.png" alt="Ogani">
+              </router-link>
             </div>
             <ul>
-              <li>Address: 60-49 Road 11378 New York</li>
-              <li>Phone: +65 11.188.888</li>
+              <li>Địa chỉ: 60-49 Đường 11378, New York</li>
+              <li>Điện thoại: +65 11.188.888</li>
               <li>Email: hello@colorlib.com</li>
             </ul>
           </div>
         </div>
+
+        <!-- Liên kết -->
         <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
           <div class="footer__widget">
-            <h6>Useful Links</h6>
+            <h6>Liên kết hữu ích</h6>
             <ul>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">About Our Shop</a></li>
-              <li><a href="#">Secure Shopping</a></li>
-              <li><a href="#">Delivery infomation</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Our Sitemap</a></li>
+              <li><a href="#">Về chúng tôi</a></li>
+              <li><a href="#">Về cửa hàng</a></li>
+              <li><a href="#">Mua sắm an toàn</a></li>
+              <li><a href="#">Thông tin giao hàng</a></li>
+              <li><a href="#">Chính sách bảo mật</a></li>
+              <li><a href="#">Sơ đồ trang web</a></li>
             </ul>
             <ul>
-              <li><a href="#">Who We Are</a></li>
-              <li><a href="#">Our Services</a></li>
-              <li><a href="#">Projects</a></li>
-              <li><router-link to="/contact">Contact</router-link></li>
-              <li><a href="#">Innovation</a></li>
-              <li><a href="#">Testimonials</a></li>
+              <li><a href="#">Chúng tôi là ai</a></li>
+              <li><a href="#">Dịch vụ</a></li>
+              <li><a href="#">Dự án</a></li>
+              <li><router-link to="/contact">Liên hệ</router-link></li>
+              <li><a href="#">Đổi mới</a></li>
+              <li><a href="#">Đánh giá</a></li>
             </ul>
           </div>
         </div>
+
+        <!-- Newsletter -->
         <div class="col-lg-4 col-md-12">
           <div class="footer__widget">
-            <h6>Join Our Newsletter Now</h6>
-            <p>Get E-mail updates about our latest shop and special offers.</p>
+            <h6>Đăng ký nhận bản tin</h6>
+            <p>Nhận email cập nhật sản phẩm mới và ưu đãi đặc biệt.</p>
             <form @submit.prevent="handleNewsletterSubmit">
-              <input v-model="email" type="email" placeholder="Enter your mail" required>
-              <button type="submit" class="site-btn">Subscribe</button>
+              <input
+                v-model="email"
+                type="email"
+                placeholder="Nhập email của bạn"
+                required
+              >
+              <button type="submit" class="site-btn">Đăng ký</button>
             </form>
             <div class="footer__widget__social">
               <a href="#"><i class="fa fa-facebook"></i></a>
@@ -52,17 +64,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Copyright -->
       <div class="row">
         <div class="col-lg-12">
           <div class="footer__copyright">
             <div class="footer__copyright__text">
-              <p>
-                Copyright &copy;{{ currentYear }} All rights reserved | This template is made with 
-                <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-              </p>
             </div>
             <div class="footer__copyright__payment">
-              <img src="/img/payment-item.png" alt="">
+              <img src="/img/payment-item.png" alt="Phương thức thanh toán">
             </div>
           </div>
         </div>
@@ -79,7 +89,7 @@ const currentYear = computed(() => new Date().getFullYear())
 
 const handleNewsletterSubmit = () => {
   if (email.value) {
-    alert(`Thank you for subscribing with: ${email.value}`)
+    alert(`Cảm ơn bạn đã đăng ký với email: ${email.value}`)
     email.value = ''
   }
 }

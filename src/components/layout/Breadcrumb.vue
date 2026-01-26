@@ -6,7 +6,7 @@
           <div class="breadcrumb__text">
             <h2>{{ title }}</h2>
             <div class="breadcrumb__option">
-              <router-link to="/">Home</router-link>
+              <router-link to="/">Trang chủ</router-link>
               <span>{{ title }}</span>
             </div>
           </div>

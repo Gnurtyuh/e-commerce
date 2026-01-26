@@ -4,55 +4,67 @@
     <section class="hero">
       <div class="container">
         <div class="row">
+          <!-- Danh mục -->
           <div class="col-lg-3">
             <div class="hero__categories">
               <div class="hero__categories__all">
                 <i class="fa fa-bars"></i>
-                <span>All departments</span>
+                <span>Tất cả danh mục</span>
               </div>
               <ul>
-                <li><a href="#">Fresh Meat</a></li>
-                <li><a href="#">Vegetables</a></li>
-                <li><a href="#">Fruit & Nut Gifts</a></li>
-                <li><a href="#">Fresh Berries</a></li>
-                <li><a href="#">Ocean Foods</a></li>
-                <li><a href="#">Butter & Eggs</a></li>
-                <li><a href="#">Fastfood</a></li>
-                <li><a href="#">Fresh Onion</a></li>
-                <li><a href="#">Papayaya & Crisps</a></li>
-                <li><a href="#">Oatmeal</a></li>
-                <li><a href="#">Fresh Bananas</a></li>
+                <li><a href="#">Thịt tươi sống</a></li>
+                <li><a href="#">Rau củ</a></li>
+                <li><a href="#">Quà trái cây & hạt</a></li>
+                <li><a href="#">Quả mọng tươi</a></li>
+                <li><a href="#">Hải sản</a></li>
+                <li><a href="#">Bơ & Trứng</a></li>
+                <li><a href="#">Thức ăn nhanh</a></li>
+                <li><a href="#">Hành tươi</a></li>
+                <li><a href="#">Đu đủ & đồ ăn vặt</a></li>
+                <li><a href="#">Yến mạch</a></li>
+                <li><a href="#">Chuối tươi</a></li>
               </ul>
             </div>
           </div>
+
+          <!-- Tìm kiếm + Banner -->
           <div class="col-lg-9">
             <div class="hero__search">
               <div class="hero__search__form">
                 <form @submit.prevent="handleSearch">
                   <div class="hero__search__categories">
-                    All Categories
+                    Tất cả ngành hàng
                     <span class="arrow_carrot-down"></span>
                   </div>
-                  <input v-model="searchQuery" type="text" placeholder="What do you need?">
-                  <button type="submit" class="site-btn">SEARCH</button>
+                  <input v-model="searchQuery" type="text" placeholder="Bạn đang tìm sản phẩm gì?">
+                  <button type="submit" class="site-btn">
+                    TÌM KIẾM
+                  </button>
                 </form>
               </div>
+
               <div class="hero__search__phone">
                 <div class="hero__search__phone__icon">
                   <i class="fa fa-phone"></i>
                 </div>
                 <div class="hero__search__phone__text">
                   <h5>+65 11.188.888</h5>
-                  <span>support 24/7 time</span>
+                  <span>Hỗ trợ 24/7</span>
                 </div>
               </div>
             </div>
-            <div class="hero__item set-bg" data-setbg="/img/hero/banner.jpg" style="background-image: url('/img/hero/banner.jpg')">
+
+            <div class="hero__item set-bg" data-setbg="/img/hero/banner.jpg"
+              style="background-image: url('/img/hero/banner.jpg')">
               <div class="hero__text">
-                <span>FRUIT FRESH</span>
-                <h2>Vegetable <br />100% Organic</h2>
-                <p>Free Pickup and Delivery Available</p>
-                <router-link to="/shop" class="primary-btn">SHOP NOW</router-link>
+                <span>TRÁI CÂY TƯƠI</span>
+                <h2>
+                  Rau củ <br />100% hữu cơ
+                </h2>
+                <p>Miễn phí giao hàng & nhận tại cửa hàng</p>
+                <router-link to="/shop" class="primary-btn">
+                  MUA NGAY
+                </router-link>
               </div>
             </div>
           </div>
@@ -67,7 +79,8 @@
         <div class="row">
           <div class="categories__slider owl-carousel">
             <div v-for="category in categories" :key="category.id" class="col-lg-3">
-              <div class="categories__item set-bg" :data-setbg="category.image" :style="{ backgroundImage: `url(${category.image})` }">
+              <div class="categories__item set-bg" :data-setbg="category.image"
+                :style="{ backgroundImage: `url(${category.image})` }">
                 <h5><a href="#">{{ category.name }}</a></h5>
               </div>
             </div>
@@ -83,25 +96,33 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="section-title">
-              <h2>Featured Product</h2>
+              <h2>Sản phẩm nổi bật</h2>
             </div>
+
             <div class="featured__controls">
               <ul>
-                <li :class="{ active: selectedFilter === '*' }" @click="selectedFilter = '*'">All</li>
-                <li :class="{ active: selectedFilter === 'oranges' }" @click="selectedFilter = 'oranges'">Oranges</li>
-                <li :class="{ active: selectedFilter === 'fresh-meat' }" @click="selectedFilter = 'fresh-meat'">Fresh Meat</li>
-                <li :class="{ active: selectedFilter === 'vegetables' }" @click="selectedFilter = 'vegetables'">Vegetables</li>
-                <li :class="{ active: selectedFilter === 'fastfood' }" @click="selectedFilter = 'fastfood'">Fastfood</li>
+                <li :class="{ active: selectedFilter === '*' }" @click="selectedFilter = '*'">
+                  Tất cả
+                </li>
+                <li :class="{ active: selectedFilter === 'oranges' }" @click="selectedFilter = 'oranges'">
+                  Trái cây
+                </li>
+                <li :class="{ active: selectedFilter === 'fresh-meat' }" @click="selectedFilter = 'fresh-meat'">
+                  Thịt tươi
+                </li>
+                <li :class="{ active: selectedFilter === 'vegetables' }" @click="selectedFilter = 'vegetables'">
+                  Rau củ
+                </li>
+                <li :class="{ active: selectedFilter === 'fastfood' }" @click="selectedFilter = 'fastfood'">
+                  Thức ăn nhanh
+                </li>
               </ul>
             </div>
           </div>
         </div>
+
         <div class="row featured__filter">
-          <ProductCard 
-            v-for="product in filteredProducts" 
-            :key="product.id" 
-            :product="product" 
-          />
+          <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
         </div>
       </div>
     </section>
@@ -132,7 +153,7 @@
         <div class="row">
           <div class="col-lg-4 col-md-6">
             <div class="latest-product__text">
-              <h4>Latest Products</h4>
+              <h4>Sản phẩm mới nhất</h4>
               <div class="latest-product__slider">
                 <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
                   <router-link :to="`/shop/${product.id}`" class="latest-product__item">
@@ -148,9 +169,10 @@
               </div>
             </div>
           </div>
+
           <div class="col-lg-4 col-md-6">
             <div class="latest-product__text">
-              <h4>Top Rated Products</h4>
+              <h4>Sản phẩm bán chạy</h4>
               <div class="latest-product__slider">
                 <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
                   <router-link :to="`/shop/${product.id}`" class="latest-product__item">
@@ -166,9 +188,10 @@
               </div>
             </div>
           </div>
+
           <div class="col-lg-4 col-md-6">
             <div class="latest-product__text">
-              <h4>Review Products</h4>
+              <h4>Sản phẩm đánh giá cao</h4>
               <div class="latest-product__slider">
                 <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
                   <router-link :to="`/shop/${product.id}`" class="latest-product__item">
@@ -195,22 +218,19 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="section-title from-blog__title">
-              <h2>From The Blog</h2>
+              <h2>Bài viết mới</h2>
             </div>
           </div>
         </div>
         <div class="row">
-          <BlogCard 
-            v-for="blog in blogPosts.slice(0, 3)" 
-            :key="blog.id" 
-            :blog="blog" 
-          />
+          <BlogCard v-for="blog in blogPosts.slice(0, 3)" :key="blog.id" :blog="blog" />
         </div>
       </div>
     </section>
     <!-- Blog Section End -->
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed } from 'vue'

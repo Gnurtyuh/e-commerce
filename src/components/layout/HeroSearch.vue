@@ -2,44 +2,47 @@
     <section class="hero hero-normal">
         <div class="container">
             <div class="row">
-                <!-- Department -->
+                <!-- Danh mục -->
                 <div class="col-lg-3">
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>Tất cả danh mục</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
+                            <li><a href="#">Thịt tươi sống</a></li>
+                            <li><a href="#">Rau củ</a></li>
+                            <li><a href="#">Trái cây & Hạt</a></li>
+                            <li><a href="#">Quả mọng tươi</a></li>
+                            <li><a href="#">Hải sản</a></li>
+                            <li><a href="#">Bơ & Trứng</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Search -->
+                <!-- Tìm kiếm -->
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
                             <form>
                                 <div class="hero__search__categories">
-                                    All Categories
+                                    Tất cả ngành hàng
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" placeholder="What do yo u need?" />
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <input type="text" placeholder="Bạn đang tìm sản phẩm gì?" />
+                                <button type="submit" class="site-btn">
+                                    TÌM KIẾM
+                                </button>
                             </form>
                         </div>
+
                         <div class="hero__search__phone">
                             <div class="hero__search__phone__icon">
                                 <i class="fa fa-phone"></i>
                             </div>
                             <div class="hero__search__phone__text">
                                 <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
+                                <span>Hỗ trợ 24/7</span>
                             </div>
                         </div>
                     </div>

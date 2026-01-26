@@ -1,32 +1,34 @@
 <template>
     <div class="sidebar__item sidebar__item__size">
-        <h4>Popular Size</h4>
+        <h4>Kích thước phổ biến</h4>
+
         <div class="sidebar__item__size__list">
             <label>
-                Large
+                Lớn
                 <input type="checkbox">
                 <span class="checkmark"></span>
             </label>
+
             <label>
-                Medium
+                Trung bình
                 <input type="checkbox">
                 <span class="checkmark"></span>
             </label>
+
             <label>
-                Small
+                Nhỏ
                 <input type="checkbox">
                 <span class="checkmark"></span>
             </label>
+
             <label>
-                Tiny
+                Rất nhỏ
                 <input type="checkbox">
                 <span class="checkmark"></span>
             </label>
         </div>
     </div>
-
 </template>
 
 <script setup>
-
 </script>

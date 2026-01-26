@@ -1,16 +1,35 @@
 <template>
   <div class="col-lg-3 col-md-4 col-sm-6 mix" :class="product.category">
     <div class="featured__item">
-      <div class="featured__item__pic set-bg" :data-setbg="product.image" :style="backgroundStyle">
+      <div
+        class="featured__item__pic set-bg"
+        :data-setbg="product.image"
+        :style="backgroundStyle"
+      >
         <ul class="featured__item__pic__hover">
-          <li><a href="#" @click.prevent="addToWishlist"><i class="fa fa-heart"></i></a></li>
-          <li><a href="#" @click.prevent><i class="fa fa-retweet"></i></a></li>
-          <li><a href="#" @click.prevent="handleAddToCart"><i class="fa fa-shopping-cart"></i></a></li>
+          <li>
+            <a href="#" @click.prevent="addToWishlist">
+              <i class="fa fa-heart"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" @click.prevent>
+              <i class="fa fa-retweet"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" @click.prevent="handleAddToCart">
+              <i class="fa fa-shopping-cart"></i>
+            </a>
+          </li>
         </ul>
       </div>
+
       <div class="featured__item__text">
         <h6>
-          <router-link :to="`/shop/${product.id}`">{{ product.name }}</router-link>
+          <router-link :to="`/shop/${product.id}`">
+            {{ product.name }}
+          </router-link>
         </h6>
         <h5>${{ product.price.toFixed(2) }}</h5>
       </div>
@@ -37,10 +56,10 @@ const backgroundStyle = computed(() => ({
 
 const handleAddToCart = () => {
   addToCart(props.product, 1)
-  alert(`${props.product.name} added to cart!`)
+  alert(`Đã thêm ${props.product.name} vào giỏ hàng!`)
 }
 
 const addToWishlist = () => {
-  alert(`${props.product.name} added to wishlist!`)
+  alert(`Đã thêm ${props.product.name} vào danh sách yêu thích!`)
 }
 </script>

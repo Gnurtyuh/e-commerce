@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumb title="Blog" />
+    <Breadcrumb title="Bài viết" />
 
     <!-- Blog Section Begin -->
     <section class="blog spad">

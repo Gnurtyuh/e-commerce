@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumb :title="blog?.title || 'Blog Details'" />
+    <Breadcrumb :title="blog?.title || 'Chi tiết bài viết'" />
 
     <!-- Blog Details Section Begin -->
     <section class="blog-details spad" v-if="blog">
@@ -11,10 +11,11 @@
               <img :src="blog.image" :alt="blog.title">
             </div>
           </div>
+
           <div class="col-lg-12">
             <div class="blog__details__content">
               <div class="blog__details__share">
-                <span>share</span>
+                <span>Chia sẻ</span>
                 <ul>
                   <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                   <li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -23,11 +24,15 @@
                   <li><a href="#"><i class="fa fa-envelope"></i></a></li>
                 </ul>
               </div>
+
               <div class="blog__details__text">
                 <div v-html="blog.content"></div>
               </div>
+
               <div class="blog__details__content__item">
-                <p>Posted by: {{ blog.author }} | {{ blog.date }}</p>
+                <p>
+                  Đăng bởi: {{ blog.author }} | Ngày đăng: {{ blog.date }}
+                </p>
               </div>
             </div>
           </div>

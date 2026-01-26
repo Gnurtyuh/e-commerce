@@ -1,83 +1,107 @@
-import { ref, computed } from 'vue'
+import { ref, computed } from "vue";
 
-// Cart state (shared across all components)
-const cartItems = ref([])
+// ================== STATE ==================
+// Danh sách sản phẩm trong giỏ hàng (dùng chung toàn app)
+const cartItems = ref([]);
 
-// Load cart from localStorage on initialization
-if (typeof window !== 'undefined') {
-    const savedCart = localStorage.getItem('ogani-cart')
-    if (savedCart) {
-        try {
-            cartItems.value = JSON.parse(savedCart)
-        } catch (e) {
-            console.error('Failed to parse cart from localStorage', e)
-        }
+// ================== LOAD CART ==================
+// Load cart từ localStorage khi khởi tạo
+if (typeof window !== "undefined") {
+  const savedCart = localStorage.getItem("ogani-cart");
+  if (savedCart) {
+    try {
+      cartItems.value = JSON.parse(savedCart);
+    } catch (e) {
+      console.error("Không thể parse giỏ hàng từ localStorage", e);
     }
+  }
 }
 
-// Save cart to localStorage
+// ================== SAVE CART ==================
 function saveCart() {
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('ogani-cart', JSON.stringify(cartItems.value))
-    }
+  if (typeof window !== "undefined") {
+    localStorage.setItem("ogani-cart", JSON.stringify(cartItems.value));
+  }
 }
 
+// ================== COMPOSABLE ==================
 export function useCart() {
-    const cartCount = computed(() => {
-        return cartItems.value.reduce((total, item) => total + item.quantity, 0)
-    })
+  // Tổng số lượng sản phẩm trong giỏ
+  const cartCount = computed(() =>
+    cartItems.value.reduce((total, item) => total + item.quantity, 0),
+  );
 
-    const cartTotal = computed(() => {
-        return cartItems.value.reduce((total, item) => total + (item.price * item.quantity), 0)
-    })
+  // Tổng tiền (chưa format)
+  const cartTotal = computed(() =>
+    cartItems.value.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0,
+    ),
+  );
 
-    function addToCart(product, quantity = 1) {
-        const existingItem = cartItems.value.find(item => item.id === product.id)
+  // Tổng tiền (đã format VNĐ)
+  const cartTotalFormatted = computed(() => formatVND(cartTotal.value));
 
-        if (existingItem) {
-            existingItem.quantity += quantity
-        } else {
-            cartItems.value.push({
-                ...product,
-                quantity
-            })
-        }
+  // ================== ACTIONS ==================
 
-        saveCart()
+  // Thêm sản phẩm vào giỏ
+  function addToCart(product, quantity = 1) {
+    const existingItem = cartItems.value.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      cartItems.value.push({
+        ...product,
+        quantity,
+      });
     }
 
-    function removeFromCart(productId) {
-        const index = cartItems.value.findIndex(item => item.id === productId)
-        if (index !== -1) {
-            cartItems.value.splice(index, 1)
-            saveCart()
-        }
-    }
+    saveCart();
+  }
 
-    function updateQuantity(productId, quantity) {
-        const item = cartItems.value.find(item => item.id === productId)
-        if (item) {
-            if (quantity <= 0) {
-                removeFromCart(productId)
-            } else {
-                item.quantity = quantity
-                saveCart()
-            }
-        }
-    }
+  // Xoá sản phẩm khỏi giỏ
+  function removeFromCart(productId) {
+    cartItems.value = cartItems.value.filter((item) => item.id !== productId);
+    saveCart();
+  }
 
-    function clearCart() {
-        cartItems.value = []
-        saveCart()
-    }
+  // Cập nhật số lượng
+  function updateQuantity(productId, quantity) {
+    const item = cartItems.value.find((item) => item.id === productId);
 
-    return {
-        cartItems,
-        cartCount,
-        cartTotal,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart
+    if (!item) return;
+
+    if (quantity <= 0) {
+      removeFromCart(productId);
+    } else {
+      item.quantity = quantity;
+      saveCart();
     }
+  }
+
+  // Xoá toàn bộ giỏ hàng
+  function clearCart() {
+    cartItems.value = [];
+    saveCart();
+  }
+
+  return {
+    cartItems,
+    cartCount,
+    cartTotal,
+    cartTotalFormatted,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+  };
+}
+
+// ================== UTILS ==================
+function formatVND(value) {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(value);
 }
