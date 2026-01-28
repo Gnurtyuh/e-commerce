@@ -48,20 +48,20 @@
                   <i class="fa fa-phone"></i>
                 </div>
                 <div class="hero__search__phone__text">
-                  <h5>+65 11.188.888</h5>
+                  <h5>+84 337114003</h5>
                   <span>Hỗ trợ 24/7</span>
                 </div>
               </div>
             </div>
 
             <div class="hero__item set-bg" data-setbg="/img/hero/banner.jpg"
-              style="background-image: url('/img/hero/banner.jpg')">
+              style=" background-image: url('/img/hero/banner.jpg')">
               <div class="hero__text">
                 <span>TRÁI CÂY TƯƠI</span>
                 <h2>
                   Rau củ <br />100% hữu cơ
                 </h2>
-                <p>Miễn phí giao hàng & nhận tại cửa hàng</p>
+                <p>Miễn phí giao hàng cho đơn từ 2 triệu</p>
                 <router-link to="/shop" class="primary-btn">
                   MUA NGAY
                 </router-link>

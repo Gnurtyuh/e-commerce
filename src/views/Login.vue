@@ -134,14 +134,19 @@ const handleLogin = async () => {
         }
       }
     );
-
     console.log("Login success:", res.data);
-
-    localStorage.setItem("role", res.data.role);
+    localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: res.data.fullName,
+          role: res.data.role
+        })
+    );
     localStorage.setItem("token", res.data.token);
+    window.dispatchEvent(new Event("auth-changed"));
 
-    alert("Đăng nhập thành công!");
-    router.push("/");
+
+    await router.push("/");
 
   } catch (err) {
     console.error(err.response?.data || err.message);

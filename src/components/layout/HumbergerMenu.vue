@@ -34,15 +34,6 @@
 
     <!-- Widget -->
     <div class="humberger__menu__widget">
-      <div class="header__top__right__language">
-        <img src="/img/language.png" alt="">
-        <div>Tiếng Anh</div>
-        <span class="arrow_carrot-down"></span>
-        <ul>
-          <li><a href="#">Tiếng Tây Ban Nha</a></li>
-          <li><a href="#">Tiếng Anh</a></li>
-        </ul>
-      </div>
 
       <div class="header__top__right__auth">
         <router-link to="/login" @click="closeMobileMenu">

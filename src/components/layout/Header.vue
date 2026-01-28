@@ -8,7 +8,7 @@
             <div class="header__top__left">
               <ul>
                 <li><i class="fa fa-envelope"></i> nkocnox2004@gmail.com</li>
-                <li>Miễn phí vận chuyển cho đơn hàng từ 99$</li>
+                <li>Miễn phí vận chuyển cho đơn hàng từ 2 triệu</li>
               </ul>
             </div>
           </div>
@@ -19,16 +19,6 @@
                 <a href="#"><i class="fa fa-twitter"></i></a>
                 <a href="#"><i class="fa fa-linkedin"></i></a>
                 <a href="#"><i class="fa fa-pinterest-p"></i></a>
-              </div>
-
-              <div class="header__top__right__language">
-                <img src="/img/language.png" alt="">
-                <div>Tiếng Anh</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                  <li><a href="#">Tiếng Tây Ban Nha</a></li>
-                  <li><a href="#">Tiếng Anh</a></li>
-                </ul>
               </div>
 
               <div class="header__top__right__auth">
@@ -115,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCart } from '@/composables/useCart'
 
@@ -126,25 +116,34 @@ const currentRoute = computed(() => route.path)
 
 /* ================= CART ================= */
 const { cartCount, cartTotal } = useCart()
-const wishlistCount = computed(() => 1) // TODO: thay bằng wishlist store
+const wishlistCount = computed(() => 1)
 
 /* ================= AUTH ================= */
 const user = ref(null)
 
-onMounted(() => {
+const loadUser = () => {
   const storedUser = localStorage.getItem('user')
-  if (storedUser) {
-    user.value = JSON.parse(storedUser)
-  }
+  user.value = storedUser ? JSON.parse(storedUser) : null
+}
+
+onMounted(() => {
+  loadUser()
+  window.addEventListener('auth-changed', loadUser)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('auth-changed', loadUser)
 })
 
 const isLoggedIn = computed(() => !!user.value)
 
 const logout = () => {
   localStorage.removeItem('user')
-  user.value = null
+  localStorage.removeItem('token')
+  window.dispatchEvent(new Event('auth-changed'))
   router.push('/login')
 }
+
 
 /* ================= MOBILE MENU ================= */
 const isMobileMenuOpen = ref(false)
