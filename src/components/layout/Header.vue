@@ -28,10 +28,13 @@
                 </router-link>
 
                 <!-- Đã đăng nhập -->
-                <div v-else class="d-flex align-items-center">
-                  <i class="fa fa-user-circle mr-2"></i>
-                  <span class="mr-2">{{ user.name }}</span>
-                  <a href="#" @click.prevent="logout" class="text-danger">
+                <div v-else class="header__user">
+                  <router-link to="/profile" class="header__user__info" :class="{ active: isProfileRoute }">
+                    <i class="fa fa-user-circle"></i>
+                    <span>{{ user.name }}</span>
+                  </router-link>
+
+                  <a href="#" @click.prevent="logout" class="header__logout">
                     Đăng xuất
                   </a>
                 </div>
@@ -162,4 +165,12 @@ const toggleMobileMenu = () => {
     overlay.classList.toggle('active', isMobileMenuOpen.value)
   }
 }
+const isProfileRoute = computed(() => {
+  return (
+    currentRoute.value.startsWith('/profile') ||
+    currentRoute.value.startsWith('/orders') ||
+    currentRoute.value.startsWith('/change-password') ||
+    currentRoute.value.startsWith('/address')
+  )
+})
 </script>

@@ -3651,3 +3651,33 @@ ol {
   background: #fdecea;
   color: #e74c3c;
 }
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header__user__info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1c1c1c;
+  font-weight: 500;
+}
+
+.header__user__info.active {
+  color: #7fad39;
+}
+
+.header__user__info i {
+  font-size: 18px;
+}
+
+.header__logout {
+  color: #b2b2b2;
+  font-size: 14px;
+}
+
+.header__logout:hover {
+  color: #e53637;
+}
