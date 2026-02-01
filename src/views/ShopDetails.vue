@@ -96,15 +96,15 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
 import Breadcrumb from '@/components/layout/Breadcrumb.vue'
 import ProductCard from '@/components/ui/ProductCard.vue'
 import { useCart } from '@/composables/useCart'
 import { products } from '@/data/products'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const { addToCart } = useCart()
-
+const productId = route.params.id
 const quantity = ref(1)
 
 const product = computed(() => {
@@ -140,5 +140,5 @@ const handleAddToCart = () => {
     )
   }
 }
-</script>
 
+</script>

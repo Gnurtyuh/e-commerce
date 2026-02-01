@@ -57,6 +57,26 @@ const routes = [
     name: "VerifyOtp",
     component: () => import("@/views/VerifyOtp.vue"),
   },
+  {
+    path: "/product/:id",
+    component: () => import("@/views/ShopDetails.vue"),
+  },
+  {
+    path: "/profile",
+    component: () => import("@/views/Profile.vue"),
+  },
+  {
+    path: "/change-password",
+    component: () => import("@/views/ChangePassword.vue"),
+  },
+  {
+    path: "/orders",
+    component: () => import("@/views/OrderHistory.vue"),
+  },
+  {
+  path: '/orders/:id',
+  component: () => import('@/views/OrderDetails.vue')
+  }
 ];
 
 const router = createRouter({
