@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class AuthenticationResponse {
+    String fullName;
     String token;
     String refreshToken;
     String role;
