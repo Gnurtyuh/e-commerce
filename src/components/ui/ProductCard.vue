@@ -8,11 +8,6 @@
       >
         <ul class="featured__item__pic__hover">
           <li>
-            <a href="#" @click.prevent="addToWishlist">
-              <i class="fa fa-heart"></i>
-            </a>
-          </li>
-          <li>
             <a href="#" @click.prevent>
               <i class="fa fa-retweet"></i>
             </a>

@@ -11,9 +11,9 @@
               </router-link>
             </div>
             <ul>
-              <li>Địa chỉ: 60-49 Đường 11378, New York</li>
-              <li>Điện thoại: +65 11.188.888</li>
-              <li>Email: hello@colorlib.com</li>
+              <li>Địa chỉ: Trường Đại học Kiến Trúc Hà Nội</li>
+              <li>Điện thoại: +84 337114003</li>
+              <li>Email: nkocnox2004@gmail.com</li>
             </ul>
           </div>
         </div>

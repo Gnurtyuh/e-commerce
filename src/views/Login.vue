@@ -115,7 +115,7 @@ const handleLogin = async () => {
         alert("OTP đã được gửi lại vào email của bạn!");
       } catch (err) {
         console.error(err.response?.data || err.message);
-        alert(err.response?.data?.message || "Gửi lại OTP thất bại");
+        alert( "Gửi lại OTP thất bại");
       }
 
       return;
@@ -151,7 +151,6 @@ const handleLogin = async () => {
   } catch (err) {
     console.error(err.response?.data || err.message);
     alert(
-      err.response?.data?.message ||
       "Email hoặc mật khẩu không đúng"
     );
   }

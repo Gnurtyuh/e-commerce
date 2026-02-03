@@ -80,22 +80,12 @@
           <div class="header__cart">
             <ul>
               <li>
-                <a href="#">
-                  <i class="fa fa-heart"></i>
-                  <span>{{ wishlistCount }}</span>
-                </a>
-              </li>
-              <li>
                 <router-link to="/cart">
                   <i class="fa fa-shopping-bag"></i>
                   <span>{{ cartCount }}</span>
                 </router-link>
               </li>
             </ul>
-            <div class="header__cart__price">
-              Tổng tiền:
-              <span>${{ cartTotal.toFixed(2) }}</span>
-            </div>
           </div>
         </div>
       </div>

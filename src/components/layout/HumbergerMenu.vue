@@ -14,22 +14,12 @@
     <div class="humberger__menu__cart">
       <ul>
         <li>
-          <a href="#">
-            <i class="fa fa-heart"></i>
-            <span>1</span>
-          </a>
-        </li>
-        <li>
           <router-link to="/cart" @click="closeMobileMenu">
             <i class="fa fa-shopping-bag"></i>
             <span>{{ cartCount }}</span>
           </router-link>
         </li>
       </ul>
-      <div class="header__cart__price">
-        Tổng tiền:
-        <span>${{ cartTotal.toFixed(2) }}</span>
-      </div>
     </div>
 
     <!-- Widget -->

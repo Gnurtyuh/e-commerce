@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <Breadcrumb title="Chi tiết sản phẩm" />
 
@@ -20,10 +20,6 @@
             <div class="product__details__text">
               <h3>{{ product.name }}</h3>
 
-              <div class="product__details__rating">
-                <i class="fa fa-star" v-for="n in 5" :key="n"></i>
-                <span>(18 đánh giá)</span>
-              </div>
 
               <div class="product__details__price">
                 ${{ product.price.toFixed(2) }}
@@ -43,10 +39,6 @@
 
               <a href="#" class="primary-btn" @click.prevent="handleAddToCart">
                 THÊM VÀO GIỎ
-              </a>
-
-              <a href="#" class="heart-icon">
-                <i class="fa fa-heart"></i>
               </a>
 
               <ul>
