@@ -15,7 +15,17 @@ spring:
     redis:
       port: 6379
       host: localhost
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nkocnox2004@gmail.com
+    password: sldm bahx sbts oiap
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
   signKey: "eb6dfa14f1cb61e65680efa7f671ec7c2da94ca1f43c80b57f91f9554ff6baae"
 server:
