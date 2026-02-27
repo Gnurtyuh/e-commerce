@@ -41,4 +41,10 @@ public class ProductService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
+    public List<ProductResponse> findByCategoryId(Long categoryId) {
+        return productRepository.findAllByCategoryId(categoryId)
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
+    }
 }

@@ -40,6 +40,11 @@ public class ProductController {
         var result = productService.findAll();
         return ResponseEntity.ok().body(result);
     }
+    @GetMapping("/categories/{categoryId}/products")
+    public ResponseEntity<List<ProductResponse>> getAllByCategory(@PathVariable Long categoryId) {
+        var result = productService.findByCategoryId(categoryId);
+        return ResponseEntity.ok().body(result);
+    }
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> delete(@PathVariable Long productId) {
         productService.delete(productId);
