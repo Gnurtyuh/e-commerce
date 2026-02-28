@@ -6,6 +6,9 @@ import com.project.userservice.category.entity.Category;
 import com.project.userservice.category.mapper.CategoryMapper;
 import com.project.userservice.category.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryService {
-    @Autowired
     CategoryRepository categoryRepository;
     @Transactional
     public CategoryResponse create(CategoryRequest dto) {
