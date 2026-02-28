@@ -7,6 +7,9 @@ import com.project.userservice.product.entity.Product;
 import com.project.userservice.product.entity.ProductVariant;
 import com.project.userservice.product.mapper.ProductVariantMapper;
 import com.project.userservice.product.repository.ProductVariantRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ProductVariantService {
-    @Autowired
-    ProductVariantRepository productVariantRepository;
-    @Autowired
-    ProductService productService;
+
+    final ProductVariantRepository productVariantRepository;
+
+    final ProductService productService;
     @Transactional
     public ProductVariantResponse create(ProductVariantRequest dto) {
         Product product = productService.findById(dto.getProductId());

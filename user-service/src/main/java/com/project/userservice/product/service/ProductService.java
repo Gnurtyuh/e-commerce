@@ -5,6 +5,7 @@ import com.project.userservice.product.dto.response.ProductResponse;
 import com.project.userservice.product.entity.Product;
 import com.project.userservice.product.mapper.ProductMapper;
 import com.project.userservice.product.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public List<ProductResponse> findAll() {
         return productRepository.findAll().stream().map(ProductMapper::toResponse).collect(Collectors.toList());
