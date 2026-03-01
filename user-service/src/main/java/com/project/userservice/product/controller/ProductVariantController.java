@@ -6,7 +6,6 @@ import com.project.userservice.product.service.ProductVariantService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,17 +24,17 @@ public class ProductVariantController {
                 .created(URI.create("/variants/"+result.getVariantId()))
                 .body(result);
     }
-    @PutMapping("/{variantId}")
+    @PutMapping("/variants/{variantId}")
     public ResponseEntity<ProductVariantResponse> update(@PathVariable Long variantId, @RequestBody ProductVariantRequest dto) {
         var result = productVariantService.update(variantId, dto);
         return ResponseEntity.ok().body(result);
     }
-    @GetMapping("/{variantId}")
+    @GetMapping("/variants/{variantId}")
     public ResponseEntity<ProductVariantResponse> get(@PathVariable Long variantId) {
         var result = productVariantService.get(variantId);
         return ResponseEntity.ok().body(result);
     }
-    @GetMapping()
+    @GetMapping("/variants")
     public ResponseEntity<List<ProductVariantResponse>> getAll() {
         var result = productVariantService.findAll();
         return ResponseEntity.ok().body(result);
@@ -45,7 +44,7 @@ public class ProductVariantController {
         var result = productVariantService.findAllByProductId(productId);
         return ResponseEntity.ok().body(result);
     }
-    @DeleteMapping("/{variantId}")
+    @DeleteMapping("/variants/{variantId}")
     public ResponseEntity<ProductVariantResponse> delete(@PathVariable Long variantId) {
         productVariantService.delete(variantId);
         return ResponseEntity.noContent().build();
