@@ -14,14 +14,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/variants")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class ProductVariantController {
     final ProductVariantService productVariantService;
-    @PostMapping
-    public ResponseEntity<ProductVariantResponse> create(@RequestBody ProductVariantRequest dto) {
-        var result = productVariantService.create(dto);
+    @PostMapping("/products/{productId}/variants")
+    public ResponseEntity<ProductVariantResponse> create(@PathVariable Long productId, @RequestBody ProductVariantRequest dto) {
+        var result = productVariantService.create(productId,dto);
         return ResponseEntity
                 .created(URI.create("/variants/"+result.getVariantId()))
                 .body(result);
@@ -42,12 +41,12 @@ public class ProductVariantController {
         return ResponseEntity.ok().body(result);
     }
     @GetMapping("/by-product/{productId}")
-    public ResponseEntity<List<ProductVariantResponse>> getAllByProductId(@RequestParam Long productId) {
+    public ResponseEntity<List<ProductVariantResponse>> getAllByProductId(@PathVariable Long productId) {
         var result = productVariantService.findAllByProductId(productId);
         return ResponseEntity.ok().body(result);
     }
     @DeleteMapping("/{variantId}")
-    public ResponseEntity<ProductVariantResponse> delete(@RequestParam Long variantId) {
+    public ResponseEntity<ProductVariantResponse> delete(@PathVariable Long variantId) {
         productVariantService.delete(variantId);
         return ResponseEntity.noContent().build();
     }

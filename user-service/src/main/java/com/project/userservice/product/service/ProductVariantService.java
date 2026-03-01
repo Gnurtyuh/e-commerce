@@ -26,8 +26,8 @@ public class ProductVariantService {
 
     final ProductService productService;
     @Transactional
-    public ProductVariantResponse create(ProductVariantRequest dto) {
-        Product product = productService.findById(dto.getProductId());
+    public ProductVariantResponse create(Long productId ,ProductVariantRequest dto) {
+        Product product = productService.findById(productId);
         return ProductVariantMapper.toResponse(
                 productVariantRepository.save(
                         ProductVariantMapper.toEntity(dto,product))
