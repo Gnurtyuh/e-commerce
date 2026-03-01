@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -22,9 +23,22 @@ public class Order {
     @Column(name = "user_id")
     Long userId;
     @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
-    private BigDecimal totalAmount;
+    BigDecimal totalAmount;
     @Column(name = "status")
     String status ;
     @Column(name = "created_at")
     LocalDateTime createdAt = LocalDateTime.now();
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<OrderItem> items;
+
+    /* ===== lifecycle ===== */
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

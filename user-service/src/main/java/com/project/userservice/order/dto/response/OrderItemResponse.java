@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class OrderItemResponse {
-    private Long orderItemId;
-    private Long variantId;
-    private BigDecimal price;
-    private Integer quantity;
+    Long orderItemId;
+    Long variantId;
+    BigDecimal price;
+    Long quantity;
 }

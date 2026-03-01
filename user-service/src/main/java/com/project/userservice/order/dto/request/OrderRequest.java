@@ -3,6 +3,7 @@ package com.project.userservice.order.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -10,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class OrderRequest {
-    private Long userId;
-    private List<OrderItemRequest> items;
+    Long userId;
+    List<OrderItemRequest> items;
+    BigDecimal totalAmount;
 }

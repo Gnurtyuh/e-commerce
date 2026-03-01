@@ -10,5 +10,5 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class OrderItemRequest {
     private Long variantId;
-    private Integer quantity;
+    private Long quantity;
 }

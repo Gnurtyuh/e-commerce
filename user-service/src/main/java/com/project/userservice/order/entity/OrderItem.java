@@ -14,23 +14,22 @@ import java.math.BigDecimal;
 @Table(name ="order_items")
 @Entity
 @Builder
-public class OrderItems {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
-    private Long orderItemId;
+    Long orderItemId;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "variant_id", nullable = false)
-    private ProductVariant variant;
+    @Column(name = "variant_id", nullable = false)
+    Long variantId;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    BigDecimal price;
 
     @Column(nullable = false)
-    private Integer quantity;
+    Long quantity;
 }
