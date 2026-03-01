@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class OrderMapper {
     public static OrderResponse toResponse(Order order) {
         OrderResponse res = new OrderResponse();
-        res.setId(order.getOrderId());
+        res.setOrderId(order.getOrderId());
         res.setUserId(order.getUserId());
         res.setStatus(order.getStatus());
         res.setTotalAmount(order.getTotalAmount());
