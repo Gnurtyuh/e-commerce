@@ -2,75 +2,51 @@
   <div>
     <!-- Hero Section Begin -->
     <section class="hero">
-      <div class="container">
-        <div class="row">
-          <!-- Danh mục -->
-          <div class="col-lg-3">
-            <div class="hero__categories">
-              <div class="hero__categories__all">
-                <i class="fa fa-bars"></i>
-                <span>Tất cả danh mục</span>
-              </div>
-              <ul>
-                <li><a href="#">Thịt tươi sống</a></li>
-                <li><a href="#">Rau củ</a></li>
-                <li><a href="#">Quà trái cây & hạt</a></li>
-                <li><a href="#">Quả mọng tươi</a></li>
-                <li><a href="#">Hải sản</a></li>
-                <li><a href="#">Bơ & Trứng</a></li>
-                <li><a href="#">Thức ăn nhanh</a></li>
-                <li><a href="#">Hành tươi</a></li>
-                <li><a href="#">Đu đủ & đồ ăn vặt</a></li>
-                <li><a href="#">Yến mạch</a></li>
-                <li><a href="#">Chuối tươi</a></li>
-              </ul>
+  <div class="container">
+    <div class="row">
+
+      <!-- DANH MỤC -->
+      <div class="col-lg-3">
+        <CategoriesMenu 
+          :categories="categories" 
+          :initiallyOpen="true" 
+          @selectCategory="goCategory"
+        />
+      </div>
+
+      <!-- SEARCH + BANNER -->
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <SearchBar :initialKeyword="''" :autoRoute="true" />
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
             </div>
-          </div>
-
-          <!-- Tìm kiếm + Banner -->
-          <div class="col-lg-9">
-            <div class="hero__search">
-              <div class="hero__search__form">
-                <form @submit.prevent="handleSearch">
-                  <div class="hero__search__categories">
-                    Tất cả ngành hàng
-                    <span class="arrow_carrot-down"></span>
-                  </div>
-                  <input v-model="searchQuery" type="text" placeholder="Bạn đang tìm sản phẩm gì?">
-                  <button type="submit" class="site-btn">
-                    TÌM KIẾM
-                  </button>
-                </form>
-              </div>
-
-              <div class="hero__search__phone">
-                <div class="hero__search__phone__icon">
-                  <i class="fa fa-phone"></i>
-                </div>
-                <div class="hero__search__phone__text">
-                  <h5>+84 337114003</h5>
-                  <span>Hỗ trợ 24/7</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="hero__item set-bg" data-setbg="/img/hero/banner.jpg"
-              style=" background-image: url('/img/hero/banner.jpg')">
-              <div class="hero__text">
-                <span>TRÁI CÂY TƯƠI</span>
-                <h2>
-                  Rau củ <br />100% hữu cơ
-                </h2>
-                <p>Miễn phí giao hàng cho đơn từ 2 triệu</p>
-                <router-link to="/shop" class="primary-btn">
-                  MUA NGAY
-                </router-link>
-              </div>
+            <div class="hero__search__phone__text">
+              <h5>+84 356 998 469</h5>
+              <span>Hỗ trợ 24/7</span>
             </div>
           </div>
         </div>
+
+        <div
+          class="hero__item"
+          style="background-image: url('/img/hero/banner.jpg')"
+        >
+          <div class="hero__text">
+            <span>TRÁI CÂY TƯƠI</span>
+            <h2>Rau củ <br />100% hữu cơ</h2>
+            <p>Miễn phí giao hàng cho đơn từ 2 triệu</p>
+            <router-link to="/shop" class="primary-btn">
+              MUA NGAY
+            </router-link>
+          </div>
+        </div>
+
       </div>
-    </section>
+    </div>
+  </div>
+</section>
     <!-- Hero Section End -->
 
     <!-- Categories Section Begin -->
@@ -162,7 +138,9 @@
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
-                      <span>${{ product.price.toFixed(2) }}</span>
+                      <span>
+                        ${{ Number(product.price || product.variants?.[0]?.price || 0).toFixed(2) }}
+                      </span>
                     </div>
                   </router-link>
                 </div>
@@ -181,7 +159,9 @@
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
-                      <span>${{ product.price.toFixed(2) }}</span>
+                      <span>
+                        ${{ product.price ? product.price.toFixed(2) : '0.00' }}
+                      </span>
                     </div>
                   </router-link>
                 </div>
@@ -200,7 +180,11 @@
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
-                      <span>${{ product.price.toFixed(2) }}</span>
+                      <span>
+                        ${{ product.variants?.[0]?.price
+                          ? product.variants[0].price.toFixed(2)
+                        : '0.00' }}
+                      </span>
                     </div>
                   </router-link>
                 </div>
@@ -233,25 +217,47 @@
 
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
 import ProductCard from '@/components/ui/ProductCard.vue'
 import BlogCard from '@/components/ui/BlogCard.vue'
-import { products, categories } from '@/data/products'
+import CategoriesMenu from '@/components/ui/CategoriesMenu.vue'
+import SearchBar from '@/components/ui/SearchBar.vue'
 import { blogPosts } from '@/data/blogs'
 
-const searchQuery = ref('')
-const selectedFilter = ref('*')
+const products = ref([])
+const categories = ref([])
 
-const filteredProducts = computed(() => {
-  if (selectedFilter.value === '*') {
-    return products
+const selectedFilter = ref('*')
+const router = useRouter()
+onMounted(async () => {
+  try {
+    const productRes = await axios.get('http://localhost:8080/products')
+    products.value = productRes.data
+
+    const categoryRes = await axios.get('http://localhost:8080/categories')
+    categories.value = categoryRes.data
+  } catch (err) {
+    console.error(err)
   }
-  return products.filter(p => p.category === selectedFilter.value)
+})
+const filteredProducts = computed(() => {
+  let result = products.value
+
+  // filter theo category nếu có
+  if (selectedFilter.value !== '*') {
+    result = result.filter(p => p.category === selectedFilter.value)
+  }
+
+  return result
 })
 
-const handleSearch = () => {
-  if (searchQuery.value) {
-    alert(`Searching for: ${searchQuery.value}`)
+const goCategory = (categoryId) => {
+  if (categoryId) {
+    router.push({ path: '/shop', query: { category: categoryId } })
   }
 }
 </script>
+<style scoped>
+</style>

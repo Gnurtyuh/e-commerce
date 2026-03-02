@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar__item sidebar__item__size">
+    <!-- <div class="sidebar__item sidebar__item__size">
         <h4>Kích thước phổ biến</h4>
 
         <div class="sidebar__item__size__list">
@@ -27,7 +27,7 @@
                 <span class="checkmark"></span>
             </label>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup>
