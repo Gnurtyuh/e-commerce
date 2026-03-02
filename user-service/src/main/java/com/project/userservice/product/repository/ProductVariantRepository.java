@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProductVariantRepository extends JpaRepository<ProductVariant,Long> {
-    @Query("select v from ProductVariant v where v.product.productId = :productId ")
+    @Query("select v from ProductVariant v where v.product.productId = :product_id ")
     List<ProductVariant> findAllByProduct_ProductId(@Param("product_id") Long productId);
 }
