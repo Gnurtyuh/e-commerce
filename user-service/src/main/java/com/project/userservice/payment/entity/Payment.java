@@ -22,16 +22,13 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
     private Long paymentId;
-
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
-
+    @Column(name = "status")
     private String status;
-
     @Column(name = "paid_at")
     private LocalDateTime paidAt;
 
