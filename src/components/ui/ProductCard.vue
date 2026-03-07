@@ -6,10 +6,11 @@
       <div
         class="featured__item__pic"
         :style="backgroundStyle"
+        @click="goToProduct"
       >
         <ul class="featured__item__pic__hover">
           <li>
-            <a href="#" @click.prevent="handleAddToCart">
+            <a href="#" @click.prevent.stop="handleAddToCart">
               <i class="fa fa-shopping-cart"></i>
             </a>
           </li>
@@ -24,7 +25,7 @@
         </h6>
 
         <!-- Backend chưa có price -->
-        <h5>{{ firstVariant?.price ? `${firstVariant.price}đ` : 'Liên hệ' }}</h5>
+        <h5>{{ firstVariant?.price ? `${firstVariant.price} VND` : 'Liên hệ' }}</h5>
       </div>
 
     </div>
@@ -34,8 +35,11 @@
 <script setup>
 import { computed } from 'vue'
 import { useCart } from '@/composables/useCart'
+import { useRouter } from 'vue-router'
 
 const API_BASE = 'http://localhost:8080'
+
+const router = useRouter()
 
 const props = defineProps({
   product: {
@@ -54,21 +58,42 @@ const mainImage = computed(() => {
   if (!props.product?.images?.length) return null
 
   return (
-    props.product.images.find(img => img.isMain) ||
-    props.product.images[0]
+      props.product.images.find(img => img.isMain) ||
+      props.product.images[0]
   )
 })
 
 const backgroundStyle = computed(() => ({
   backgroundImage: mainImage.value
-    ? `url(${API_BASE}/${mainImage.value.imagePath})`
-    : `url(https://via.placeholder.com/300x250?text=${props.product.name})`,
+      ? `url(${API_BASE}/${mainImage.value.imagePath})`
+      : `url(https://via.placeholder.com/300x250?text=${props.product.name})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center'
 }))
 
+/* ======================
+   GO TO PRODUCT
+====================== */
+const goToProduct = () => {
+  router.push(`/shop/${props.product.productId}`)
+}
+
+/* ======================
+   ADD TO CART
+====================== */
 const handleAddToCart = () => {
-  addToCart(props.product, 1)
+
+  const productCart = {
+    productId: props.product.productId,
+    name: props.product.name,
+    price: firstVariant.value?.price || 0,
+    image: mainImage.value
+        ? `${API_BASE}/${mainImage.value.imagePath}`
+        : 'https://via.placeholder.com/300x250'
+  }
+
+  addToCart(productCart, 1)
+
   alert(`Đã thêm ${props.product.name} vào giỏ hàng!`)
 }
 </script>

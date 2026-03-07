@@ -12,7 +12,7 @@
             </div>
             <ul>
               <li>Địa chỉ: Trường Đại học Kiến Trúc Hà Nội</li>
-              <li>Điện thoại: +84 337114003</li>
+              <li>Điện thoại: +84 356 998 469</li>
               <li>Email: nkocnox2004@gmail.com</li>
             </ul>
           </div>

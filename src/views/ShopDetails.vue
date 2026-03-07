@@ -26,7 +26,7 @@
               <h3>{{ product.name }}</h3>
 
               <div class="product__details__price">
-                {{ displayPrice }}đ
+                {{ displayPrice }}VND
               </div>
 
               <p>{{ product.description }}</p>
@@ -205,16 +205,19 @@ const decreaseQuantity = () => {
    ADD TO CART
 ====================== */
 const handleAddToCart = () => {
+
   if (!product.value) return
 
-  addToCart({
-    ...product.value,
+  const productCart = {
+    productId: product.value.productId,
+    name: product.value.name,
     price: displayPrice.value,
     image: mainImage.value
-  }, quantity.value)
+  }
+
+  addToCart(productCart, quantity.value)
 
   alert(`Đã thêm ${quantity.value} x ${product.value.name} vào giỏ hàng!`)
 }
-
 onMounted(fetchProductDetail)
 </script>

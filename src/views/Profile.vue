@@ -12,7 +12,7 @@
                             <div class="col-md-6">
                                 <div class="profile__group">
                                     <label>Họ và tên</label>
-                                    <input v-model="user.name" />
+                                    <input v-model="user.fullName" />
                                 </div>
                             </div>
 
@@ -44,7 +44,7 @@
 
                         <div class="profile__group">
                             <label>Tên người nhận</label>
-                            <input v-model="address.name" placeholder="Tên người nhận" />
+                            <input v-model="address.receiverName " placeholder="Tên người nhận" />
                         </div>
 
                         <div class="profile__group">
@@ -54,7 +54,7 @@
 
                         <div class="profile__group">
                             <label>Địa chỉ chi tiết</label>
-                            <input v-model="address.detail"
+                            <input v-model="address.address"
                                 placeholder="Số nhà, phường/xã, quận/huyện, tỉnh/thành phố" />
                         </div>
 
@@ -72,25 +72,157 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
+import axios from 'axios'
+
+const API_BASE = "http://localhost:8080"
 
 const user = reactive({
-    name: 'Nguyễn Văn A',
-    email: 'test@gmail.com',
-    phone: ''
+  userId: '',
+  fullName: '',
+  email: '',
+  phone: ''
 })
 
 const address = reactive({
-    name: '',
-    phone: '',
-    detail: ''
+  receiverName: '',
+  phone: '',
+  address: ''
 })
 
-const updateProfile = () => {
-    console.log('Cập nhật thông tin người dùng:', user)
+/* ======================
+   LOAD USER INFO
+====================== */
+const loadUser = async () => {
+  try {
+
+    const email = localStorage.getItem("email")
+
+    const res = await axios.get(
+        `${API_BASE}/users/user/info`,
+        { params: { email } }
+    )
+    user.userId = res.data.userId
+    user.fullName = res.data.fullName
+    user.email = res.data.email
+    user.phone = res.data.phone
+    console.log(user.userId)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-const saveAddress = () => {
-    console.log('Lưu địa chỉ giao hàng:', address)
+const loadAddress = async () => {
+  try {
+
+    const res = await axios.get(
+        `${API_BASE}/users/${user.userId}/address`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+  )
+    // nếu không có địa chỉ
+    if (!res.data) {
+      console.log("Người dùng chưa có địa chỉ")
+      return
+    }
+
+    address.phone = res.data.phone || ""
+    address.receiverName = res.data.receiverName || ""
+    address.address = res.data.address || ""
+
+  } catch (err) {
+
+    // nếu backend trả 404 thì coi như chưa có địa chỉ
+    if (err.response && err.response.status === 404) {
+      console.log("Người dùng chưa có địa chỉ")
+      return
+    }
+
+    console.error("Lỗi load address:", err)
+  }
 }
+
+/* ======================
+   UPDATE PROFILE
+====================== */
+const updateProfile = async () => {
+  try {
+
+    await axios.post(
+        `${API_BASE}/users/user`,
+        {
+          fullName: user.fullName,
+          email: user.email,
+          phone: user.phone
+        }
+    )
+
+    alert("Cập nhật thông tin thành công")
+
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+
+/* ======================
+   SAVE ADDRESS
+====================== */
+const saveAddress = async () => {
+  try {
+
+    const payload = {
+      receiverName: address.receiverName,
+      phone: address.phone,
+      address: address.address,
+      userId: user.userId
+    }
+
+    if (address.addressId) {
+
+      // UPDATE
+      await axios.put(
+          `${API_BASE}/users/${user.userId}/address/${address.addressId}`,
+          {
+            ...payload,
+          }
+      )
+
+      alert("Cập nhật địa chỉ thành công")
+
+    } else {
+
+      // CREATE
+      const res = await axios.post(
+          `${API_BASE}/users/${user.userId}/address`,
+          {
+            receiverName: address.receiverName,
+            phone: address.phone,
+            address: address.address,
+            userId: user.userId
+          }
+      )
+
+      address.addressId = res.data.addressId
+
+      alert("Đã tạo địa chỉ")
+
+    }
+
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+/* ======================
+   LOAD WHEN PAGE OPEN
+====================== */
+onMounted(async () => {
+  await loadUser()
+  await loadAddress()
+})
 </script>

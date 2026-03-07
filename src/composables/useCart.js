@@ -1,89 +1,113 @@
-import { ref, computed } from "vue";
-
+import { ref, computed } from "vue"
 // ================== STATE ==================
-// Danh sách sản phẩm trong giỏ hàng (dùng chung toàn app)
-const cartItems = ref([]);
+const cartItems = ref([])
 
 // ================== LOAD CART ==================
-// Load cart từ localStorage khi khởi tạo
 if (typeof window !== "undefined") {
-  const savedCart = localStorage.getItem("ogani-cart");
+
+  const savedCart = localStorage.getItem("ogani-cart")
+
   if (savedCart) {
     try {
-      cartItems.value = JSON.parse(savedCart);
+      cartItems.value = JSON.parse(savedCart)
     } catch (e) {
-      console.error("Không thể parse giỏ hàng từ localStorage", e);
+      console.error("Không parse được cart", e)
     }
   }
 }
 
 // ================== SAVE CART ==================
 function saveCart() {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("ogani-cart", JSON.stringify(cartItems.value));
-  }
+  localStorage.setItem("ogani-cart", JSON.stringify(cartItems.value))
 }
 
 // ================== COMPOSABLE ==================
 export function useCart() {
-  // Tổng số lượng sản phẩm trong giỏ
+
+  // ================== TOTAL ITEMS ==================
   const cartCount = computed(() =>
-    cartItems.value.reduce((total, item) => total + item.quantity, 0),
-  );
+      cartItems.value.reduce(
+          (total, item) => total + item.quantity,
+          0
+      )
+  )
 
-  // Tổng tiền (chưa format)
+  // ================== TOTAL PRICE ==================
   const cartTotal = computed(() =>
-    cartItems.value.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    ),
-  );
+      cartItems.value.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+      )
+  )
 
-  // Tổng tiền (đã format VNĐ)
-  const cartTotalFormatted = computed(() => formatVND(cartTotal.value));
+  const cartTotalFormatted = computed(() =>
+      formatVND(cartTotal.value)
+  )
 
-  // ================== ACTIONS ==================
-
-  // Thêm sản phẩm vào giỏ
+  // ================== ADD TO CART ==================
   function addToCart(product, quantity = 1) {
-    const existingItem = cartItems.value.find((item) => item.id === product.id);
+
+    const existingItem = cartItems.value.find(
+        item => item.productId === product.productId
+    )
 
     if (existingItem) {
-      existingItem.quantity += quantity;
+
+      existingItem.quantity += quantity
+
     } else {
+
       cartItems.value.push({
-        ...product,
-        quantity,
-      });
+        productId: product.productId,
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        quantity
+      })
+
     }
 
-    saveCart();
+    saveCart()
   }
 
-  // Xoá sản phẩm khỏi giỏ
+  // ================== REMOVE ==================
   function removeFromCart(productId) {
-    cartItems.value = cartItems.value.filter((item) => item.id !== productId);
-    saveCart();
+
+    cartItems.value =
+        cartItems.value.filter(
+            item => item.productId !== productId
+        )
+
+    saveCart()
   }
 
-  // Cập nhật số lượng
+  // ================== UPDATE ==================
   function updateQuantity(productId, quantity) {
-    const item = cartItems.value.find((item) => item.id === productId);
 
-    if (!item) return;
+    const item =
+        cartItems.value.find(
+            item => item.productId === productId
+        )
+
+    if (!item) return
 
     if (quantity <= 0) {
-      removeFromCart(productId);
+
+      removeFromCart(productId)
+
     } else {
-      item.quantity = quantity;
-      saveCart();
+
+      item.quantity = quantity
+      saveCart()
+
     }
+
   }
 
-  // Xoá toàn bộ giỏ hàng
+  // ================== CLEAR ==================
   function clearCart() {
-    cartItems.value = [];
-    saveCart();
+    cartItems.value = []
+    saveCart()
   }
 
   return {
@@ -94,14 +118,16 @@ export function useCart() {
     addToCart,
     removeFromCart,
     updateQuantity,
-    clearCart,
-  };
+    clearCart
+  }
 }
 
-// ================== UTILS ==================
+// ================== FORMAT ==================
 function formatVND(value) {
+
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
-    currency: "VND",
-  }).format(value);
+    currency: "VND"
+  }).format(value)
+
 }

@@ -79,7 +79,7 @@
               </div>
               <ProductCard
                 v-for="product in paginatedProducts"
-                :key="product.productId || product.id"
+                :key="product.productId || product.productId"
                 :product="product"
               />
             </div>

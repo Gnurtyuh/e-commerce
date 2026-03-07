@@ -98,7 +98,7 @@
         </div>
 
         <div class="row featured__filter">
-          <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
+          <ProductCard v-for="product in filteredProducts" :key="product.productId" :product="product" />
         </div>
       </div>
     </section>
@@ -131,15 +131,15 @@
             <div class="latest-product__text">
               <h4>Sản phẩm mới nhất</h4>
               <div class="latest-product__slider">
-                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
-                  <router-link :to="`/shop/${product.id}`" class="latest-product__item">
+                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.productId">
+                  <router-link :to="`/shop/${product.productId}`" class="latest-product__item">
                     <div class="latest-product__item__pic">
                       <img :src="product.image" alt="">
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
                       <span>
-                        {{ Number(product.price || product.variants?.[0]?.price || 0) }}đ
+                        {{ Number(product.price || product.variants?.[0]?.price || 0) }} VND
                       </span>
                     </div>
                   </router-link>
@@ -152,15 +152,15 @@
             <div class="latest-product__text">
               <h4>Sản phẩm bán chạy</h4>
               <div class="latest-product__slider">
-                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
-                  <router-link :to="`/shop/${product.id}`" class="latest-product__item">
+                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.productId">
+                  <router-link :to="`/shop/${product.productId}`" class="latest-product__item">
                     <div class="latest-product__item__pic">
                       <img :src="product.image" alt="">
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
                       <span>
-                        ${{ product.price ? product.price.toFixed(2) : '0.00' }}
+                        {{ Number(product.price || product.variants?.[0]?.price || 0) }} VND
                       </span>
                     </div>
                   </router-link>
@@ -173,17 +173,15 @@
             <div class="latest-product__text">
               <h4>Sản phẩm đánh giá cao</h4>
               <div class="latest-product__slider">
-                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.id">
-                  <router-link :to="`/shop/${product.id}`" class="latest-product__item">
+                <div class="latest-product__slider__item" v-for="product in products.slice(0, 3)" :key="product.productId">
+                  <router-link :to="`/shop/${product.productId}`" class="latest-product__item">
                     <div class="latest-product__item__pic">
                       <img :src="product.image" alt="">
                     </div>
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
                       <span>
-                        ${{ product.variants?.[0]?.price
-                          ? product.variants[0].price.toFixed(2)
-                        : '0.00' }}
+                        {{ Number(product.price || product.variants?.[0]?.price || 0) }} VND
                       </span>
                     </div>
                   </router-link>
@@ -235,9 +233,9 @@ const router = useRouter()
 onMounted(async () => {
   try {
     const productRes = await axios.get(`${API_BASE}/products`)
-products.value = await attachProductData(productRes.data)
+    products.value = await attachProductData(productRes.data)
 
-    const categoryRes = await axios.get('http://localhost:8080/categories')
+    const categoryRes = await axios.get(`${API_BASE}/categories`)
     categories.value = categoryRes.data
   } catch (err) {
     console.error(err)
@@ -251,11 +249,17 @@ const attachProductData = async (productList) => {
         axios.get(`${API_BASE}/by-product/${product.productId}`),
         axios.get(`${API_BASE}/products/${product.productId}/images`)
       ])
+      const images = imageRes.data || []
 
+      const mainImage =
+          images.find(img => img.isMain) || images[0]
       return {
         ...product,
         variants: variantRes.data || [],
-        images: imageRes.data || []
+        images: images,
+        image: mainImage
+            ? `${API_BASE}/${mainImage.imagePath}`
+            : "https://via.placeholder.com/300x250"
       }
     })
   )

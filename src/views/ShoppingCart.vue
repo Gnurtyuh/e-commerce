@@ -20,7 +20,7 @@
                 </thead>
 
                 <tbody>
-                  <tr v-for="item in cartItems" :key="item.id">
+                  <tr v-for="item in cartItems" :key="item.productId">
                     <td class="shoping__cart__item">
                       <img
                         :src="item.image"
@@ -31,7 +31,7 @@
                     </td>
 
                     <td class="shoping__cart__price">
-                      ${{ item.price }}
+                      {{ item.price }}VND
                     </td>
 
                     <td class="shoping__cart__quantity">
@@ -39,7 +39,7 @@
                         <div class="pro-qty">
                           <span
                             class="dec qtybtn"
-                            @click="updateQuantity(item.id, item.quantity - 1)"
+                            @click="updateQuantity(item.productId, item.quantity - 1)"
                           >-</span>
 
                           <input
@@ -50,20 +50,20 @@
 
                           <span
                             class="inc qtybtn"
-                            @click="updateQuantity(item.id, item.quantity + 1)"
+                            @click="updateQuantity(item.productId, item.quantity + 1)"
                           >+</span>
                         </div>
                       </div>
                     </td>
 
                     <td class="shoping__cart__total">
-                      ${{ (item.price * item.quantity) }}
+                      {{ (item.price * item.quantity) }} VND
                     </td>
 
                     <td class="shoping__cart__item__close">
                       <span
                         class="icon_close"
-                        @click="removeFromCart(item.id)"
+                        @click="removeFromCart(item.productId)"
                       ></span>
                     </td>
                   </tr>
@@ -99,16 +99,7 @@
           <div class="col-lg-6">
             <div class="shoping__continue">
               <div class="shoping__discount">
-                <h5>Mã giảm giá</h5>
-                <form @submit.prevent>
-                  <input
-                    type="text"
-                    placeholder="Nhập mã giảm giá"
-                  >
-                  <button type="submit" class="site-btn">
-                    ÁP DỤNG
-                  </button>
-                </form>
+
               </div>
             </div>
           </div>
@@ -120,11 +111,11 @@
               <ul>
                 <li>
                   Tạm tính
-                  <span>${{ cartTotal }}</span>
+                  <span>{{ cartTotal }} VND</span>
                 </li>
                 <li>
                   Tổng cộng
-                  <span>${{ cartTotal }}</span>
+                  <span>{{ cartTotal }} VND</span>
                 </li>
               </ul>
 

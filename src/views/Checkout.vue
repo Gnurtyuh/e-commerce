@@ -9,8 +9,6 @@
           <div class="col-lg-12">
             <h6>
               <span class="icon_tag_alt"></span>
-              Có mã giảm giá?
-              <a href="#">Nhấn vào đây</a> để nhập mã
             </h6>
           </div>
         </div>

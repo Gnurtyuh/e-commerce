@@ -10,7 +10,7 @@
             <div class="contact__widget">
               <span class="icon_phone"></span>
               <h4>Điện thoại</h4>
-              <p>+01-3-8888-6868</p>
+              <p>+84 356 998 469</p>
             </div>
           </div>
 
@@ -18,7 +18,7 @@
             <div class="contact__widget">
               <span class="icon_pin_alt"></span>
               <h4>Địa chỉ</h4>
-              <p>60-49 Đường 11378, New York</p>
+              <p>Trường Đại học Kiến Trúc Hà Nội</p>
             </div>
           </div>
 
@@ -34,7 +34,7 @@
             <div class="contact__widget">
               <span class="icon_mail_alt"></span>
               <h4>Email</h4>
-              <p>hello@colorlib.com</p>
+              <p>nkocnox2004@gmail.com</p>
             </div>
           </div>
         </div>
