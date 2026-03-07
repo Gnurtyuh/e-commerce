@@ -55,7 +55,7 @@ public class PaymentService {
     @Transactional(readOnly = true)
     public List<PaymentResponse> getPaymentsByOrder(Long orderId) {
 
-        return paymentRepository.findByOrderId(orderId)
+        return paymentRepository.findByOrder_OrderId(orderId)
                 .stream()
                 .map(PaymentMapper::toResponse)
                 .toList();
