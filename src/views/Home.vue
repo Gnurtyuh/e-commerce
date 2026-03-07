@@ -139,7 +139,7 @@
                     <div class="latest-product__item__text">
                       <h6>{{ product.name }}</h6>
                       <span>
-                        ${{ Number(product.price || product.variants?.[0]?.price || 0).toFixed(2) }}
+                        {{ Number(product.price || product.variants?.[0]?.price || 0) }}đ
                       </span>
                     </div>
                   </router-link>
@@ -226,6 +226,7 @@ import CategoriesMenu from '@/components/ui/CategoriesMenu.vue'
 import SearchBar from '@/components/ui/SearchBar.vue'
 import { blogPosts } from '@/data/blogs'
 
+const API_BASE = 'http://localhost:8080'
 const products = ref([])
 const categories = ref([])
 
@@ -233,8 +234,8 @@ const selectedFilter = ref('*')
 const router = useRouter()
 onMounted(async () => {
   try {
-    const productRes = await axios.get('http://localhost:8080/products')
-    products.value = productRes.data
+    const productRes = await axios.get(`${API_BASE}/products`)
+products.value = await attachProductData(productRes.data)
 
     const categoryRes = await axios.get('http://localhost:8080/categories')
     categories.value = categoryRes.data
@@ -242,6 +243,25 @@ onMounted(async () => {
     console.error(err)
   }
 })
+
+const attachProductData = async (productList) => {
+  return await Promise.all(
+    productList.map(async (product) => {
+      const [variantRes, imageRes] = await Promise.all([
+        axios.get(`${API_BASE}/by-product/${product.productId}`),
+        axios.get(`${API_BASE}/products/${product.productId}/images`)
+      ])
+
+      return {
+        ...product,
+        variants: variantRes.data || [],
+        images: imageRes.data || []
+      }
+    })
+  )
+}
+
+
 const filteredProducts = computed(() => {
   let result = products.value
 
@@ -259,5 +279,3 @@ const goCategory = (categoryId) => {
   }
 }
 </script>
-<style scoped>
-</style>

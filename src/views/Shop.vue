@@ -33,7 +33,7 @@
       </div>
     </section>
 
-    <Breadcrumb title="Cửa hàng" />
+    <Breadcrumb title="Sản phẩm" />
 
     <section class="product spad">
       <div class="container">
@@ -122,6 +122,31 @@ const activeCategoryId = ref(null)
 const productListRef = ref(null)
 
 const API_BASE = 'http://localhost:8080'
+const attachProductData = async (productList) => {
+  return await Promise.all(
+    productList.map(async (product) => {
+      try {
+        const [variantRes, imageRes] = await Promise.all([
+          axios.get(`${API_BASE}/by-product/${product.productId}`),
+          axios.get(`${API_BASE}/products/${product.productId}/images`)
+        ])
+
+        return {
+          ...product,
+          variants: variantRes.data || [],
+          images: imageRes.data || []
+        }
+      } catch (err) {
+        console.error('Lỗi load variants/images:', err)
+        return {
+          ...product,
+          variants: [],
+          images: []
+        }
+      }
+    })
+  )
+}
 
 /* ======================
    PAGINATION STATE
@@ -145,9 +170,11 @@ const fetchCategories = async () => {
 const fetchAllProducts = async () => {
   try {
     const res = await axios.get(`${API_BASE}/products`)
-    products.value = res.data
+
+    products.value = await attachProductData(res.data)
     activeCategoryId.value = null
     currentPage.value = 1
+
   } catch (err) {
     console.error('Lỗi lấy sản phẩm:', err)
   }
@@ -155,10 +182,15 @@ const fetchAllProducts = async () => {
 
 const fetchProductsByCategory = async (categoryId) => {
   try {
-    const res = await axios.get(`${API_BASE}/products/by-category/${categoryId}`)
-    products.value = res.data
+    const res = await axios.get(
+      `${API_BASE}/products/by-category/${categoryId}`
+    )
+
+    products.value = await attachProductData(res.data)
+
     activeCategoryId.value = categoryId
     currentPage.value = 1
+
   } catch (err) {
     console.error('Lỗi lọc theo category:', err)
   }

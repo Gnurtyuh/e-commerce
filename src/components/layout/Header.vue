@@ -64,7 +64,7 @@
                 <router-link to="/">Trang chủ</router-link>
               </li>
               <li :class="{ active: currentRoute === '/shop' }">
-                <router-link to="/shop">Cửa hàng</router-link>
+                <router-link to="/shop">Sản phẩm</router-link>
               </li>
               <li :class="{ active: currentRoute.includes('/blog') }">
                 <router-link to="/blog">Blog</router-link>

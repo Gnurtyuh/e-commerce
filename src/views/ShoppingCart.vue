@@ -31,7 +31,7 @@
                     </td>
 
                     <td class="shoping__cart__price">
-                      ${{ item.price.toFixed(2) }}
+                      ${{ item.price }}
                     </td>
 
                     <td class="shoping__cart__quantity">
@@ -57,7 +57,7 @@
                     </td>
 
                     <td class="shoping__cart__total">
-                      ${{ (item.price * item.quantity).toFixed(2) }}
+                      ${{ (item.price * item.quantity) }}
                     </td>
 
                     <td class="shoping__cart__item__close">
@@ -120,11 +120,11 @@
               <ul>
                 <li>
                   Tạm tính
-                  <span>${{ cartTotal.toFixed(2) }}</span>
+                  <span>${{ cartTotal }}</span>
                 </li>
                 <li>
                   Tổng cộng
-                  <span>${{ cartTotal.toFixed(2) }}</span>
+                  <span>${{ cartTotal }}</span>
                 </li>
               </ul>
 

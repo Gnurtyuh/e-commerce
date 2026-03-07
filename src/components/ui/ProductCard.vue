@@ -24,7 +24,7 @@
         </h6>
 
         <!-- Backend chưa có price -->
-        <h5>Liên hệ</h5>
+        <h5>{{ firstVariant?.price ? `${firstVariant.price}đ` : 'Liên hệ' }}</h5>
       </div>
 
     </div>
@@ -35,6 +35,8 @@
 import { computed } from 'vue'
 import { useCart } from '@/composables/useCart'
 
+const API_BASE = 'http://localhost:8080'
+
 const props = defineProps({
   product: {
     type: Object,
@@ -44,9 +46,23 @@ const props = defineProps({
 
 const { addToCart } = useCart()
 
-// Vì backend chưa có image → dùng ảnh placeholder
+const firstVariant = computed(() => {
+  return props.product?.variants?.[0] || null
+})
+
+const mainImage = computed(() => {
+  if (!props.product?.images?.length) return null
+
+  return (
+    props.product.images.find(img => img.isMain) ||
+    props.product.images[0]
+  )
+})
+
 const backgroundStyle = computed(() => ({
-  backgroundImage: `url(https://via.placeholder.com/300x250?text=${props.product.name})`,
+  backgroundImage: mainImage.value
+    ? `url(${API_BASE}/${mainImage.value.imagePath})`
+    : `url(https://via.placeholder.com/300x250?text=${props.product.name})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center'
 }))

@@ -1,28 +1,32 @@
-  <template>
+<template>
   <div>
     <Breadcrumb title="Chi tiết sản phẩm" />
 
-    <!-- Product Details Section Begin -->
     <section class="product-details spad" v-if="product">
       <div class="container">
         <div class="row">
-          <!-- Hình ảnh -->
+
+          <!-- IMAGE -->
           <div class="col-lg-6 col-md-6">
             <div class="product__details__pic">
               <div class="product__details__pic__item">
-                <img class="product__details__pic__item--large" :src="product.image" :alt="product.name">
+                <img
+                  class="product__details__pic__item--large"
+                  :src="mainImage"
+                  :alt="product.name"
+                >
               </div>
             </div>
           </div>
 
-          <!-- Thông tin -->
+          <!-- INFO -->
           <div class="col-lg-6 col-md-6">
             <div class="product__details__text">
+
               <h3>{{ product.name }}</h3>
 
-
               <div class="product__details__price">
-                ${{ product.price.toFixed(2) }}
+                {{ displayPrice }}đ
               </div>
 
               <p>{{ product.description }}</p>
@@ -44,29 +48,23 @@
               <ul>
                 <li>
                   <b>Tình trạng</b>
-                  <span>Còn hàng ({{ product.stock }} sản phẩm)</span>
+                  <span>Còn hàng</span>
                 </li>
                 <li>
                   <b>Giao hàng</b>
-                  <span>
-                    Giao trong 1 ngày.
-                    <span>Nhận tại cửa hàng miễn phí hôm nay</span>
-                  </span>
-                </li>
-                <li>
-                  <b>Trọng lượng</b>
-                  <span>0.5 kg</span>
+                  <span>Giao trong 1 ngày</span>
                 </li>
               </ul>
+
             </div>
           </div>
+
         </div>
       </div>
     </section>
-    <!-- Product Details Section End -->
 
-    <!-- Related Product Section Begin -->
-    <section class="related-product">
+    <!-- RELATED -->
+    <section class="related-product" v-if="relatedProducts.length">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
@@ -77,60 +75,146 @@
         </div>
 
         <div class="row">
-          <ProductCard v-for="product in relatedProducts" :key="product.id" :product="product" />
+          <ProductCard
+            v-for="item in relatedProducts"
+            :key="item.productId"
+            :product="item"
+          />
         </div>
       </div>
     </section>
-    <!-- Related Product Section End -->
+
   </div>
 </template>
 
-
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
+import { useRoute } from 'vue-router'
 import Breadcrumb from '@/components/layout/Breadcrumb.vue'
 import ProductCard from '@/components/ui/ProductCard.vue'
 import { useCart } from '@/composables/useCart'
-import { products } from '@/data/products'
-import { useRoute } from 'vue-router'
+
+const API_BASE = 'http://localhost:8080'
 
 const route = useRoute()
 const { addToCart } = useCart()
-const productId = route.params.id
+
+const product = ref(null)
+const relatedProducts = ref([])
 const quantity = ref(1)
 
-const product = computed(() => {
-  return products.find(p => p.id === parseInt(route.params.id))
-})
+/* ======================
+   LOAD PRODUCT DETAIL
+====================== */
+const fetchProductDetail = async () => {
+  try {
+    const productId = route.params.id
 
-const relatedProducts = computed(() => {
-  if (!product.value) return []
-  return products
-    .filter(
-      p =>
-        p.category === product.value.category &&
-        p.id !== product.value.id
+    const productRes = await axios.get(
+      `${API_BASE}/products/${productId}`
     )
-    .slice(0, 4)
-})
 
-const increaseQuantity = () => {
-  quantity.value++
+    const baseProduct = productRes.data
+
+    const [variantRes, imageRes] = await Promise.all([
+      axios.get(`${API_BASE}/by-product/${productId}`),
+      axios.get(`${API_BASE}/products/${productId}/images`)
+    ])
+
+    product.value = {
+      ...baseProduct,
+      variants: variantRes.data || [],
+      images: imageRes.data || []
+    }
+
+    fetchRelatedProducts(baseProduct.categoryId)
+
+  } catch (err) {
+    console.error('Lỗi load chi tiết sản phẩm:', err)
+  }
 }
 
+/* ======================
+   LOAD RELATED
+====================== */
+const fetchRelatedProducts = async (categoryId) => {
+  try {
+    const res = await axios.get(
+      `${API_BASE}/products/by-category/${categoryId}`
+    )
+
+    const filtered = res.data
+      .filter(p => p.productId != route.params.id)
+      .slice(0, 4)
+
+    // attach variants + images giống product detail
+    relatedProducts.value = await Promise.all(
+      filtered.map(async (item) => {
+        const [variantRes, imageRes] = await Promise.all([
+          axios.get(`${API_BASE}/by-product/${item.productId}`),
+          axios.get(`${API_BASE}/products/${item.productId}/images`)
+        ])
+
+        return {
+          ...item,
+          variants: variantRes.data || [],
+          images: imageRes.data || []
+        }
+      })
+    )
+
+  } catch (err) {
+    console.error('Lỗi load related:', err)
+  }
+}
+
+/* ======================
+   IMAGE
+====================== */
+const mainImage = computed(() => {
+  if (!product.value?.images?.length)
+    return 'https://via.placeholder.com/500x500?text=No+Image'
+
+  const main = product.value.images.find(i => i.isMain)
+
+  const imagePath = main
+    ? main.imagePath
+    : product.value.images[0].imagePath
+
+  return `${API_BASE}/${imagePath}`
+})
+
+/* ======================
+   PRICE
+====================== */
+const displayPrice = computed(() => {
+  if (!product.value?.variants?.length) return 0
+  return product.value.variants[0].price
+})
+
+/* ======================
+   QUANTITY
+====================== */
+const increaseQuantity = () => quantity.value++
 const decreaseQuantity = () => {
-  if (quantity.value > 1) {
-    quantity.value--
-  }
+  if (quantity.value > 1) quantity.value--
 }
 
+/* ======================
+   ADD TO CART
+====================== */
 const handleAddToCart = () => {
-  if (product.value) {
-    addToCart(product.value, quantity.value)
-    alert(
-      `Đã thêm ${quantity.value} x ${product.value.name} vào giỏ hàng!`
-    )
-  }
+  if (!product.value) return
+
+  addToCart({
+    ...product.value,
+    price: displayPrice.value,
+    image: mainImage.value
+  }, quantity.value)
+
+  alert(`Đã thêm ${quantity.value} x ${product.value.name} vào giỏ hàng!`)
 }
 
+onMounted(fetchProductDetail)
 </script>
