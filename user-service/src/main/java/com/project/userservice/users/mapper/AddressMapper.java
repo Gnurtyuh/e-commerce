@@ -10,11 +10,10 @@ import org.springframework.stereotype.Component;
 public class AddressMapper {
     public static Addresses toAddresses(AddressRequest addressRequest) {
         Addresses addresses = new Addresses();
-        addresses.setAddressId(addressRequest.getAddressId());
         addresses.setAddress(addressRequest.getAddress());
         addresses.setPhone(addressRequest.getPhone());
         addresses.setUserId(addressRequest.getUserId());
-        addresses.setIsDefault(addressRequest.getIsDefault());
+        addresses.setIsDefault(true);
         addresses.setReceiverName(addressRequest.getReceiverName());
         return addresses;
     }

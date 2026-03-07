@@ -1,9 +1,6 @@
 package com.project.userservice.users.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,7 +16,8 @@ import java.util.UUID;
 @Builder
 public class Addresses {
     @Id
-    @Column(name = "address_id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "address_id", updatable = false)
     UUID addressId;
     @Column(name= "user_id")
     UUID userId;
@@ -32,5 +30,5 @@ public class Addresses {
     @Column(name= "is_default")
     Boolean isDefault;
     @Column(name= "created_at")
-    Timestamp createdAt;
+    Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 }

@@ -12,11 +12,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class AddressRequest {
-    UUID addressId;
     UUID userId;
     String receiverName;
     String phone;
     String address;
-    Boolean isDefault;
 
 }

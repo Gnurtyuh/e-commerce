@@ -25,7 +25,7 @@ public class UserController {
         return ResponseEntity.ok("Update user successful");
     }
     @GetMapping("/info")
-    public ResponseEntity<UserResponse> info(String email) {
+    public ResponseEntity<UserResponse> info(@RequestParam String email) {
         var result = userService.info(email);
         return ResponseEntity.ok(result);
     }

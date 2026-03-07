@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface AddressRepository extends JpaRepository<Addresses, UUID> {
     @Query("SELECT a from Addresses a where a.userId = ?1 and a.isDefault= true")
     Addresses findByAddressIdAndDefault(UUID userId);
-    List<Addresses> findByUserId(UUID userId);
+    Addresses findByUserId(UUID userId);
+    void deleteByUserId(UUID userId);
 }

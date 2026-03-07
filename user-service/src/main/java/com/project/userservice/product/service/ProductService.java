@@ -8,6 +8,7 @@ import com.project.userservice.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class ProductService {
         Product product = productRepository.save(ProductMapper.toEntity(productRequest));
         return ProductMapper.toResponse(product);
     }
+    @Transactional
     public ProductResponse update(Long productId ,ProductRequest productRequest) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         product.setName(productRequest.getName());
@@ -38,6 +40,7 @@ public class ProductService {
         product.setCategoryId(productRequest.getCategoryId());
         return ProductMapper.toResponse(productRepository.save(product));
     }
+    @Transactional
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);

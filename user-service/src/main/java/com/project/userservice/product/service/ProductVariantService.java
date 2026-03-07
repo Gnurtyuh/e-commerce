@@ -43,6 +43,7 @@ public class ProductVariantService {
         entity.setStock(dto.getStock());
         return ProductVariantMapper.toResponse(productVariantRepository.save(entity));
     }
+    @Transactional
     public void delete(Long variantId) {
         productVariantRepository.deleteById(variantId);
     }

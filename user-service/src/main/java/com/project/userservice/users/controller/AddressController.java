@@ -2,6 +2,7 @@ package com.project.userservice.users.controller;
 
 import com.project.userservice.users.dto.request.AddressRequest;
 import com.project.userservice.users.service.AddressService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,32 +10,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users/address")
+@RequiredArgsConstructor
 public class AddressController {
-    @Autowired
-    private AddressService addressService;
-    @PostMapping
-    public ResponseEntity<?> addAddress(@RequestBody AddressRequest address) {
-        addressService.createAddress(address);
+    private final AddressService addressService;
+    @PostMapping("/users/{userId}/address")
+    public ResponseEntity<?> addAddress(@PathVariable UUID userId,@RequestBody AddressRequest address) {
+        addressService.createAddress(userId, address);
         return ResponseEntity.ok("The address has been created");
     }
-    @PutMapping
-    public ResponseEntity<?> updateAddress(@RequestBody AddressRequest address) {
-        addressService.updateAddress(address);
+    @PutMapping("/users/address/{addressId}")
+    public ResponseEntity<?> updateAddress(@PathVariable UUID addressId,@RequestBody AddressRequest address) {
+        addressService.updateAddress(addressId, address);
         return ResponseEntity.ok("The address has been updated");
     }
-    @DeleteMapping("/{addressId}")
+    @DeleteMapping("/users/address/{addressId}")
     public ResponseEntity<?> deleteAddress(@PathVariable UUID addressId) {
         addressService.deleteAddress(addressId);
         return ResponseEntity.ok("The address has been deleted");
     }
-    @GetMapping("/{addressId}")
+    @GetMapping("/users/address/{addressId}")
     public ResponseEntity<?> getAddress(@PathVariable UUID addressId) {
         var result = addressService.getAddress(addressId);
         return ResponseEntity.ok(result);
     }
-    @GetMapping("/{userId}/addresses")
-    public ResponseEntity<?> getAddresses(@PathVariable UUID userId) {
+    @GetMapping("/users/{userId}/address")
+    public ResponseEntity<?> getAddressByUserId(@PathVariable UUID userId) {
         var result =  addressService.getByUserId(userId);
         return ResponseEntity.ok(result);
     }
