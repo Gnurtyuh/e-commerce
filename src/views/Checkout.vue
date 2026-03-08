@@ -40,13 +40,8 @@
 
                 <div class="checkout__input">
                   <p>Email<span>*</span></p>
-                  <input type="email" v-model="form.email" required>
+                  <input type="email" v-model="form.email" readonly required>
                 </div>
-
-                <!-- <div class="checkout__input">
-                  <p>Tỉnh / Thành phố<span>*</span></p>
-                  <input v-model="form.city" required>
-                </div> -->
 
                 <div class="checkout__input">
                   <p>Địa chỉ chi tiết<span>*</span></p>
@@ -63,7 +58,6 @@
                 </div>
 
               </div>
-
 
               <!-- RIGHT -->
               <div class="col-lg-4 col-md-6">
@@ -93,7 +87,6 @@
                     <span>{{ cartTotal.toFixed(2) }} VND</span>
                   </div>
 
-
                   <div class="checkout__payment">
 
                     <div class="checkout__input__checkbox">
@@ -113,7 +106,6 @@
                     </div>
 
                   </div>
-
 
                   <div v-if="qrPayment" class="qr-box">
 
@@ -137,7 +129,6 @@
 
                   </div>
 
-
                   <button type="submit" class="site-btn" :disabled="loading">
                     {{ loading ? 'Đang xử lý...' : 'ĐẶT HÀNG' }}
                   </button>
@@ -156,8 +147,6 @@
 
   </div>
 </template>
-
-
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -184,34 +173,31 @@ const form = ref({
   phone: '',
   email: '',
   address: '',
-  city: '',
   notes: '',
   paymentMethod: 'cod'
 })
 
-
-
-/**
- * LOAD USER + ADDRESS
- */
-
+/* CHECK LOGIN + LOAD USER */
 onMounted(async () => {
+
+  const token = localStorage.getItem('token')
+  const email = localStorage.getItem('email')
+
+  if (!token || !email) {
+
+    alert("Vui lòng đăng nhập để thanh toán")
+
+    router.push({
+      path: "/login",
+      query: { redirect: "/checkout" }
+    })
+
+    return
+  }
 
   try {
 
-    const email = localStorage.getItem('email')
-
-    if (!email) {
-      console.error("Email không tồn tại trong localStorage")
-      return
-    }
-
-    // encode email
     const encodedEmail = encodeURIComponent(email)
-
-    /**
-     * STEP 1: GET USER INFO
-     */
 
     const userRes = await axios.get(
       `http://localhost:8080/users/user/info?email=${encodedEmail}`
@@ -219,18 +205,12 @@ onMounted(async () => {
 
     user.value = userRes.data
 
-
-    /**
-     * STEP 2: GET ADDRESS BY USER ID
-     */
-
     const addressRes = await axios.get(
       `http://localhost:8080/users/${user.value.userId}/address`
     )
 
     let data = addressRes.data
 
-    // Fix crash .find()
     if (Array.isArray(data)) {
       addresses.value = data
     } else if (data) {
@@ -238,10 +218,6 @@ onMounted(async () => {
     } else {
       addresses.value = []
     }
-
-    /**
-     * FIND DEFAULT ADDRESS
-     */
 
     defaultAddress.value =
       addresses.value.find(a => a.isDefault === true)
@@ -251,7 +227,6 @@ onMounted(async () => {
     }
 
   }
-
   catch (error) {
 
     console.error("Load user error:", error)
@@ -260,12 +235,7 @@ onMounted(async () => {
 
 })
 
-
-
-/**
- * USE DEFAULT ADDRESS
- */
-
+/* USE DEFAULT ADDRESS */
 const useDefaultAddress = () => {
 
   if (!defaultAddress.value || !user.value) return
@@ -277,12 +247,7 @@ const useDefaultAddress = () => {
 
 }
 
-
-
-/**
- * NEW ADDRESS
- */
-
+/* NEW ADDRESS */
 const useNewAddress = () => {
 
   if (!user.value) return
@@ -290,32 +255,40 @@ const useNewAddress = () => {
   form.value.full_name = ''
   form.value.phone = ''
   form.value.address = ''
-  form.value.city = ''
-  form.value.email = ''
+
+  // email vẫn giữ
+  form.value.email = user.value.email
 
 }
 
-
-
-/**
- * CONFIRM SHIPPING
- */
-
+/* CONFIRM SHIPPING */
 const confirmShipping = () => {
+
   alert('Thông tin giao hàng đã được xác nhận!')
+
 }
 
-
-
-/**
- * CHECKOUT
- */
-
+/* CHECKOUT */
 const handleCheckout = async () => {
 
-  if (!cartItems.value.length) {
-    alert('Giỏ hàng trống!')
+  const token = localStorage.getItem("token")
+
+  if (!token) {
+
+    alert("Bạn cần đăng nhập để đặt hàng")
+
+    router.push("/login")
+
     return
+
+  }
+
+  if (!cartItems.value.length) {
+
+    alert('Giỏ hàng trống!')
+
+    return
+
   }
 
   try {
@@ -349,13 +322,11 @@ const handleCheckout = async () => {
     startCheckingPayment(res.orderId)
 
   }
-
   catch (error) {
 
     alert('Thanh toán thất bại')
 
   }
-
   finally {
 
     loading.value = false
@@ -364,12 +335,7 @@ const handleCheckout = async () => {
 
 }
 
-
-
-/**
- * CHECK PAYMENT
- */
-
+/* CHECK PAYMENT */
 const startCheckingPayment = (orderId) => {
 
   checkingPayment.value = true
@@ -394,12 +360,7 @@ const startCheckingPayment = (orderId) => {
 
 }
 
-
-
-/**
- * FAKE API PAYMENT
- */
-
+/* FAKE PAYMENT API */
 const fakeApi = (url, data = null) => {
 
   return new Promise(resolve => {
@@ -439,8 +400,6 @@ const fakeApi = (url, data = null) => {
 
 }
 </script>
-
-
 
 <style scoped>
 
