@@ -5,13 +5,15 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder
 public class OrderRequest {
-    Long userId;
+    UUID userId;
     List<OrderItemRequest> items;
     BigDecimal totalAmount;
 }

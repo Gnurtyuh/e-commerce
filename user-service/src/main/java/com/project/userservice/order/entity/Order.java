@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -18,10 +19,10 @@ import java.util.List;
 public class Order {
     @Id
     @Column(name = "order_id", nullable = false, updatable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long orderId ;
     @Column(name = "user_id")
-    Long userId;
+    UUID userId;
     @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
     BigDecimal totalAmount;
     @Column(name = "status")

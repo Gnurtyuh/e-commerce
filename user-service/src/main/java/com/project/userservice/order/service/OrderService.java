@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,12 +26,13 @@ import java.util.List;
 public class OrderService {
     OrderRepository orderRepository;
     ProductVariantRepository variantRepository;
-
+    @Transactional
     public OrderResponse createOrder(OrderRequest request){
         Order order = new Order();
         order.setUserId(request.getUserId());
         order.setStatus("CREATED");
         BigDecimal total = BigDecimal.ZERO;
+        List<OrderItem> orderItems = new ArrayList<>();
         for (OrderItemRequest reqItem : request.getItems()) {
 
             ProductVariant variant = variantRepository.findById(reqItem.getVariantId())
@@ -46,7 +48,7 @@ public class OrderService {
             item.setPrice(variant.getPrice());
             item.setQuantity(reqItem.getQuantity());
 
-            order.getItems().add(item);
+            orderItems.add(item);
 
             total = total.add(
                     variant.getPrice()
@@ -57,7 +59,7 @@ public class OrderService {
             variant.setStock(variant.getStock() - reqItem.getQuantity());
         }
         order.setTotalAmount(total);
-
+        order.setItems(orderItems);
         return OrderMapper.toResponse(orderRepository.save(order));
     };
     @Transactional(readOnly = true)
