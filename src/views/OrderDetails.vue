@@ -134,18 +134,6 @@ const loading = ref(true)
 const loadingItems = ref(true)
 const error = ref(null)
 
-// Computed: Kiểm tra có thể hủy đơn không
-const canCancel = computed(() => {
-  return order.value && ['PENDING', 'PROCESSING'].includes(order.value.status)
-})
-
-// Computed: Kiểm tra có thể thanh toán không
-const canPay = computed(() => {
-  return order.value &&
-      order.value.paymentStatus === 'PENDING' &&
-      ['PENDING', 'PROCESSING'].includes(order.value.status)
-})
-
 onMounted(() => {
   fetchOrderDetail()
 })
@@ -240,31 +228,6 @@ const fetchOrderItems = async () => {
   }
 }
 
-// Hủy đơn hàng
-const cancelOrder = async () => {
-  if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-    return
-  }
-
-  const token = localStorage.getItem('token')
-
-  try {
-    await axios.put(
-        `http://localhost:8080/orders/${orderId}/cancel`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-    )
-
-    alert('Hủy đơn hàng thành công')
-    await fetchOrderDetail() // Tải lại thông tin
-
-  } catch (err) {
-    console.error('Error cancelling order:', err)
-    alert(err.response?.data?.message || 'Không thể hủy đơn hàng')
-  }
-}
 
 
 // Format functions
@@ -278,14 +241,6 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
-}
-
-const formatCurrency = (amount) => {
-  if (!amount && amount !== 0) return '0 VND'
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND'
-  }).format(amount)
 }
 
 const formatAddress = (address) => {
@@ -310,28 +265,6 @@ const getStatusClass = (status) => {
     'COMPLETED': 'completed',
     'CANCELLED': 'cancelled',
     'PAID': 'paid'
-  }
-  return map[status] || 'pending'
-}
-
-const getStatusText = (status) => {
-  const map = {
-    'PENDING': 'Chờ xử lý',
-    'PROCESSING': 'Đang xử lý',
-    'SHIPPING': 'Đang giao hàng',
-    'DELIVERED': 'Đã giao hàng',
-    'COMPLETED': 'Hoàn thành',
-    'CANCELLED': 'Đã hủy'
-  }
-  return map[status] || status
-}
-
-const getPaymentStatusClass = (status) => {
-  const map = {
-    'PAID': 'paid',
-    'PENDING': 'pending',
-    'FAILED': 'failed',
-    'CANCELLED': 'cancelled'
   }
   return map[status] || 'pending'
 }

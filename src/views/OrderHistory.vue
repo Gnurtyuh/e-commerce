@@ -48,7 +48,7 @@
                 <tr v-for="order in orders" :key="order.orderId">
                   <td>#{{ order.orderId }}</td>
                   <td>{{ formatDate(order.createdAt) }}</td>
-                  <td>{{ formatCurrency(order.totalAmount) }}</td>
+                  <td>{{ (order.totalAmount) }} VND</td>
                   <td>
                     <span class="order__status" :class="getStatusClass(order.status)">
                       {{ getStatusText(order.status) }}
@@ -129,14 +129,6 @@ const formatDate = (dateString) => {
   })
 }
 
-// Format currency
-const formatCurrency = (amount) => {
-  if (!amount) return '0 VND'
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND'
-  }).format(amount)
-}
 
 // Get status class for styling
 const getStatusClass = (status) => {
@@ -237,34 +229,6 @@ const getStatusText = (status) => {
   color: white;
 }
 
-.order__status.cancelled {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.payment__status {
-  display: inline-block;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.payment__status.paid {
-  background: #28a745;
-  color: white;
-}
-
-.payment__status.pending {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.payment__status.failed,
-.payment__status.cancelled {
-  background: #f8d7da;
-  color: #721c24;
-}
 
 .site-btn.btn-sm {
   padding: 5px 15px;
