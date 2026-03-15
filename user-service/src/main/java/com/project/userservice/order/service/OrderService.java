@@ -55,13 +55,35 @@ public class OrderService {
                             .multiply(BigDecimal.valueOf(reqItem.getQuantity()))
             );
 
-            // trừ kho
-            variant.setStock(variant.getStock() - reqItem.getQuantity());
         }
         order.setTotalAmount(total);
         order.setItems(orderItems);
         return OrderMapper.toResponse(orderRepository.save(order));
     };
+    @Transactional
+    public void updateOrderPaid(Long orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if ("PAID".equals(order.getStatus())) {
+            return;
+        }
+
+        for (OrderItem item : order.getItems()) {
+
+            ProductVariant variant = variantRepository.findById(item.getVariantId())
+                    .orElseThrow(() -> new RuntimeException("Variant not found"));
+
+            if (variant.getStock() < item.getQuantity()) {
+                throw new RuntimeException("Out of stock");
+            }
+
+            variant.setStock(variant.getStock() - item.getQuantity());
+        }
+
+        order.setStatus("PAID");
+    }
     @Transactional(readOnly = true)
     public OrderResponse getOrderById(Long orderId){
         return orderRepository.findById(orderId)
@@ -80,6 +102,7 @@ public class OrderService {
     public List<OrderResponse> getAllOrders(){
         return orderRepository.findAll()
                 .stream().map(OrderMapper::toResponse)
+                .filter(order -> order.getStatus().equals("PAID"))
                 .toList();
     }
 }
