@@ -17,4 +17,5 @@ public class PaymentResponse {
     private BigDecimal amount;
     private String status;
     private LocalDateTime paidAt;
+    private Long orderCode;
 }

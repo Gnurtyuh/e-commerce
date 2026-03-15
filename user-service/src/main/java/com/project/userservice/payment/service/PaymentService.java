@@ -50,7 +50,7 @@ public class PaymentService {
                 .amount((long) order.getTotalAmount().intValue())
                 .description("Order" + orderId)
                 .returnUrl("http://localhost:3000/payment-success")
-                .cancelUrl("http://localhost:3000/cart")
+                .cancelUrl("http://localhost:3000/payment-cancel")
                 .build();
 
         var paymentLink = payOS.paymentRequests().create(paymentRequest);
