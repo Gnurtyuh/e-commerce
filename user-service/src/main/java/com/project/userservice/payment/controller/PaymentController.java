@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/payments")
@@ -20,12 +21,12 @@ public class PaymentController {
     private final PaymentService paymentService;
 
 
-    @PostMapping
+    @PostMapping("/create/{orderId}")
     @Operation(summary = "Thanh toán đơn hàng")
-    public ResponseEntity<PaymentResponse> createPayment(
-            @RequestBody PaymentRequest request
-    ) {
-        return ResponseEntity.ok(paymentService.create(request));
+    public ResponseEntity<?> createPayment(
+            @PathVariable Long orderId
+    ) throws Exception {
+        return ResponseEntity.ok(paymentService.create(orderId));
     }
 
 
@@ -37,5 +38,36 @@ public class PaymentController {
         return ResponseEntity.ok(
                 paymentService.getPaymentsByOrder(orderId)
         );
+    }
+    @PostMapping("/verify")
+    @Operation(summary = "Xác thực thanh toán")
+    public ResponseEntity<?> verifyPayment(@RequestBody Map<String, Object> paymentData) {
+        try {
+            boolean verified = paymentService.verifyPayment(paymentData);
+            return ResponseEntity.ok(Map.of(
+                    "success", verified,
+                    "message", verified ? "Xác thực thành công" : "Xác thực thất bại"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
+    }
+
+    // THÊM API NÀY - Lấy trạng thái payment theo orderCode
+    @GetMapping("/status/{orderCode}")
+    @Operation(summary = "Lấy trạng thái thanh toán")
+    public ResponseEntity<?> getPaymentStatus(@PathVariable Long orderCode) {
+        try {
+            PaymentResponse payment = paymentService.getPaymentByOrderCode(orderCode);
+            return ResponseEntity.ok(payment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
     }
 }

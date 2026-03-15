@@ -31,5 +31,7 @@ public class Payment {
     private String status;
     @Column(name = "paid_at")
     private LocalDateTime paidAt;
+    @Column(name ="order_code")
+    private Long orderCode;
 
 }
