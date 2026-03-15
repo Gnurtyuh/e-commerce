@@ -38,7 +38,7 @@
                   <span class="label">Trạng thái:</span>
                   <span class="value">
                     <span class="order__status" :class="getStatusClass(order.status)">
-                      {{ getStatusText(order.status) }}
+                      {{ getPaymentStatusText(order.status) }}
                     </span>
                   </span>
                 </div>
@@ -86,9 +86,9 @@
                       <span class="product-name">{{ item.productName }}</span>
                     </div>
                   </td>
-                  <td>{{ formatCurrency(item.price) }}</td>
+                  <td>{{ (item.price) }} VND</td>
                   <td>{{ item.quantity }}</td>
-                  <td>{{ formatCurrency(item.price * item.quantity) }}</td>
+                  <td>{{ (item.price * item.quantity) }} VND</td>
                 </tr>
                 </tbody>
 
@@ -96,19 +96,11 @@
                 <tfoot>
                 <tr>
                   <td colspan="3" class="text-right">Tạm tính:</td>
-                  <td>{{ formatCurrency(order.subtotal || order.totalAmount) }}</td>
-                </tr>
-                <tr v-if="order.discount">
-                  <td colspan="3" class="text-right">Giảm giá:</td>
-                  <td>-{{ formatCurrency(order.discount) }}</td>
-                </tr>
-                <tr v-if="order.shippingFee">
-                  <td colspan="3" class="text-right">Phí vận chuyển:</td>
-                  <td>{{ formatCurrency(order.shippingFee) }}</td>
+                  <td>{{ (order.subtotal || order.totalAmount) }} VND</td>
                 </tr>
                 <tr class="total-row">
                   <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
-                  <td><strong>{{ formatCurrency(order.totalAmount) }}</strong></td>
+                  <td><strong>{{ (order.totalAmount) }} VND</strong></td>
                 </tr>
                 </tfoot>
               </table>
@@ -316,7 +308,8 @@ const getStatusClass = (status) => {
     'SHIPPING': 'shipping',
     'DELIVERED': 'delivered',
     'COMPLETED': 'completed',
-    'CANCELLED': 'cancelled'
+    'CANCELLED': 'cancelled',
+    'PAID': 'paid'
   }
   return map[status] || 'pending'
 }
@@ -461,7 +454,18 @@ const getPaymentStatusText = (status) => {
   font-weight: 500;
 }
 
-.order__status,
+.order__status {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.order__status.paid {
+  background: #28a745;
+  color: white;
+}
+
 .payment__status {
   display: inline-block;
   padding: 5px 12px;
@@ -470,12 +474,6 @@ const getPaymentStatusText = (status) => {
   font-weight: 500;
 }
 
-.order__status.pending { background: #fff3cd; color: #856404; }
-.order__status.processing { background: #cce5ff; color: #004085; }
-.order__status.shipping { background: #d4edda; color: #155724; }
-.order__status.delivered,
-.order__status.completed { background: #28a745; color: white; }
-.order__status.cancelled { background: #f8d7da; color: #721c24; }
 
 .payment__status.paid { background: #28a745; color: white; }
 .payment__status.pending { background: #fff3cd; color: #856404; }

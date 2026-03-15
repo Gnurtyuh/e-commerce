@@ -1,7 +1,8 @@
 <template>
   <div>
     <Breadcrumb title="Thanh toán thất bại" />
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <section class="payment-result spad">
       <div class="container">
         <div class="row justify-content-center">
@@ -43,7 +44,7 @@ const route = useRoute()
 const router = useRouter()
 
 const goToCart = () => {
-  router.push('/shoping-cart')
+  router.push('/cart')
 }
 </script>
 
