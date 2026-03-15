@@ -2,6 +2,7 @@ package com.project.userservice.payment.controller;
 
 import com.project.userservice.order.entity.Order;
 import com.project.userservice.order.repository.OrderRepository;
+import com.project.userservice.order.service.OrderService;
 import com.project.userservice.payment.entity.Payment;
 import com.project.userservice.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class PayOSWebhookController {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final PayOS payOS;
+    private final OrderService orderService;
 
     @PostMapping("/webhook")
     public ResponseEntity<?> handleWebhook(@RequestBody Webhook webhook) {
@@ -60,8 +62,7 @@ public class PayOSWebhookController {
                     payment.setPaidAt(LocalDateTime.now());
                     // Cập nhật order thành PAID
                     Order order = payment.getOrder();
-                    order.setStatus("PAID");
-                    orderRepository.save(order);
+                    orderService.updateOrderPaid(order.getOrderId());
                     log.info("Order {} updated to PAID", order.getOrderId());
                 } else {
                     // Cập nhật order thành PENDING hoặc FAILED tùy logic

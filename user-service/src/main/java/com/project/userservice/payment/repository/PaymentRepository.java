@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
-    @Query("select p from Payment p where p.order.orderId = :order_id ")
-    List<Payment> findByOrder_OrderId(@Param("order_id") Long orderId);
+    @Query("select p from Payment p where p.order.orderId = :order_id and p.status = 'PAID' ")
+    Payment findByOrder_OrderId(@Param("order_id") Long orderId);
     Optional<Payment> findByOrderCode(Long orderCode);
 }

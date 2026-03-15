@@ -32,7 +32,7 @@ public class PaymentController {
 
     @GetMapping("/orders/{orderId}")
     @Operation(summary = "Lấy danh sách thanh toán theo order")
-    public ResponseEntity<List<PaymentResponse>> getPaymentsByOrder(
+    public ResponseEntity<PaymentResponse> getPaymentsByOrder(
             @PathVariable Long orderId
     ) {
         return ResponseEntity.ok(

@@ -60,12 +60,9 @@ public class PaymentService {
 
 
     @Transactional(readOnly = true)
-    public List<PaymentResponse> getPaymentsByOrder(Long orderId) {
+    public PaymentResponse getPaymentsByOrder(Long orderId) {
 
-        return paymentRepository.findByOrder_OrderId(orderId)
-                .stream()
-                .map(PaymentMapper::toResponse)
-                .toList();
+        return PaymentMapper.toResponse(paymentRepository.findByOrder_OrderId(orderId));
     }
     public boolean verifyPayment(Map<String, Object> paymentData) {
         try {
