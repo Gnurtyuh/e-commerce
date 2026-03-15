@@ -86,6 +86,8 @@ const handleAddToCart = () => {
   const productCart = {
     productId: props.product.productId,
     name: props.product.name,
+    variantId: firstVariant.value?.variantId,
+    stock: firstVariant.value?.stock,
     price: firstVariant.value?.price || 0,
     image: mainImage.value
         ? `${API_BASE}/${mainImage.value.imagePath}`
@@ -94,6 +96,7 @@ const handleAddToCart = () => {
 
   addToCart(productCart, 1)
 
-  alert(`Đã thêm ${props.product.name} vào giỏ hàng!`)
+  alert(`Đã thêm ${props.product.name}  vào giỏ hàng!`)
+
 }
 </script>
