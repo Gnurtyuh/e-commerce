@@ -12,12 +12,20 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Builder
 public class Category {
+
     @Id
     @Column(name = "category_id", nullable = false, updatable = false)
-    @GeneratedValue
-    Long categoryId ;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_seq")
+    @SequenceGenerator(
+            name = "categories_seq",
+            sequenceName = "categories_seq",
+            allocationSize = 1
+    )
+    Long categoryId;
+
     @Column(name ="name")
-    String name ;
+    String name;
+
     @Column(name ="parent_id")
     Long parentId;
 }

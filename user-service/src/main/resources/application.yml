@@ -1,7 +1,7 @@
 spring:
   application:
-    name:
-      user-service
+    name: user-service
+
   datasource:
     url: jdbc:postgresql://localhost:5432/user
     username: postgres
@@ -11,10 +11,18 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+    properties:
+      hibernate:
+        id:
+          optimizer:
+            pooled:
+              preferred: none
+
   data:
     redis:
       port: 6379
       host: localhost
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -31,3 +39,7 @@ jwt:
 server:
   port: 8080
   address: 0.0.0.0
+payos:
+  client-id: "3149d006-a3f1-4367-918c-9b1d19f2ae11"
+  api-key: "61566a25-fe4d-4ceb-bb26-3b9c704404f9"
+  checksum-key: "ed744b8da5447ce2333708f30828e2e9207fa3e1804bc4e8fe415a6128943f9f"

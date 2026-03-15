@@ -1,6 +1,5 @@
 package com.project.userservice.product.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,17 +14,27 @@ import java.math.BigDecimal;
 @Entity
 @Builder
 public class ProductVariant {
+
     @Id
     @Column(name = "variant_id", nullable = false, updatable = false)
-    @GeneratedValue
-    Long variantId ;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_variants_seq")
+    @SequenceGenerator(
+            name = "product_variants_seq",
+            sequenceName = "product_variants_seq",
+            allocationSize = 1
+    )
+    Long variantId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     Product product;
+
     @Column(name = "sku")
-    String sku ;
+    String sku;
+
     @Column(name = "price")
     BigDecimal price;
+
     @Column(name = "stock")
     Long stock;
 }
