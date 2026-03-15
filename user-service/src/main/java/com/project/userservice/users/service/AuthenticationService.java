@@ -34,6 +34,7 @@ public class AuthenticationService {
                 .token(token)
                 .refreshToken(refreshToken)
                 .role(user.getRole())
+                .userId(user.getUserId())
                 .build();
     }
     public void register(UserRequest userRequest) {
