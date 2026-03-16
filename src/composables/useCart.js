@@ -1,4 +1,5 @@
 import { ref, computed } from "vue"
+import {q} from "vue-router/dist/devtools-EWN81iOl.mjs";
 // ================== STATE ==================
 const cartItems = ref([])
 
@@ -59,8 +60,10 @@ export function useCart() {
 
       cartItems.value.push({
         productId: product.productId,
+        variantId: product.variantId,
         name: product.name,
         image: product.image,
+        stock: product.stock,
         price: product.price,
         quantity
       })

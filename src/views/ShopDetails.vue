@@ -211,13 +211,15 @@ const handleAddToCart = () => {
   const productCart = {
     productId: product.value.productId,
     name: product.value.name,
+    variantId: product.value.variants[0].variantId,
+    stock: product.value.variants[0].stock,
     price: displayPrice.value,
     image: mainImage.value
   }
 
   addToCart(productCart, quantity.value)
 
-  alert(`Đã thêm ${quantity.value} x ${product.value.name} vào giỏ hàng!`)
+  alert(`Đã thêm ${quantity.value} x ${product.value.name} ${product.value.variants[0].variantId} ${product.value.variants[0].stock} vào giỏ hàng!`)
 }
 onMounted(fetchProductDetail)
 </script>

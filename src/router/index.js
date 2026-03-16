@@ -75,7 +75,20 @@ const routes = [
   },
   {
     path: '/orders/:id',
-    component: () => import('@/views/OrderDetails.vue')
+    component: () => import('@/views/OrderDetails.vue'),
+    path: '/orders/:id',
+    component: () => import('@/views/OrderDetails.vue'),
+  },
+  // router/index.js
+  {
+    path: '/payment-success',
+    name: 'PaymentSuccess',
+    component: () => import('@/views/PaymentSuccess.vue')
+  },
+  {
+    path: '/payment-cancel',
+    name: 'PaymentCancel',
+    component: () => import('@/views/PaymentCancel.vue')
   }
 ];
 

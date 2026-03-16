@@ -143,7 +143,7 @@ const handleLogin = async () => {
         })
     );
     localStorage.setItem("token", res.data.token);
-
+    localStorage.setItem("userId", res.data.userId);
     localStorage.setItem("email", form.email);
     window.dispatchEvent(new Event("auth-changed"));
 
