@@ -146,8 +146,7 @@ onMounted(async () => {
     form.value.full_name = user.fullName
     form.value.phone = user.phone
     form.value.email = user.email
-    form.value.address = user.address
-
+    await loadAddress()
   }
   catch (error) {
 
@@ -156,11 +155,57 @@ onMounted(async () => {
   }
 
 })
+const loadAddress = async () => {
+  try {
+    const userId = localStorage.getItem('userId')
+    const res = await axios.get(
+        `http://localhost:8080/users/${userId}/address`,
 
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+    )
+    // nếu không có địa chỉ
+    if (!res.data) {
+      console.log("Người dùng chưa có địa chỉ")
+      return
+    }
+
+    form.value.address = res.data.address
+  } catch (err) {
+
+    // nếu backend trả 404 thì coi như chưa có địa chỉ
+    if (err.response && err.response.status === 404) {
+      console.log("Người dùng chưa có địa chỉ")
+      return
+    }
+
+    console.error("Lỗi load address:", err)
+  }
+}
+const isFormValid = () => {
+  if (
+      !form.value.full_name?.trim() ||
+      !form.value.phone?.trim() ||
+      !form.value.email?.trim() ||
+      !form.value.address?.trim()
+  ) {
+    return false
+  }
+
+  return true
+}
 /* PAYMENT */
 const handleCheckout = async () => {
 
   const token = localStorage.getItem("token")
+  // kiểm tra form trước
+  if (!isFormValid()) {
+    alert("Vui lòng cập nhật đầy đủ thông tin giao hàng trước khi thanh toán")
+    return
+  }
 
   try {
 
@@ -173,7 +218,6 @@ const handleCheckout = async () => {
           headers: { Authorization: `Bearer ${token}` }
         }
     )
-
     const checkoutUrl = res.data
 
     if (checkoutUrl) {
