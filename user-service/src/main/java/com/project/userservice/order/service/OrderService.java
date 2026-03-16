@@ -10,9 +10,12 @@ import com.project.userservice.order.mapper.OrderMapper;
 import com.project.userservice.order.repository.OrderRepository;
 import com.project.userservice.product.entity.ProductVariant;
 import com.project.userservice.product.repository.ProductVariantRepository;
+import com.project.userservice.users.entity.Users;
+import com.project.userservice.users.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,8 @@ import java.util.List;
 public class OrderService {
     OrderRepository orderRepository;
     ProductVariantRepository variantRepository;
+    UserRepository userRepository;
+    EmailService emailService;
     @Transactional
     public OrderResponse createOrder(OrderRequest request){
         Order order = new Order();
@@ -81,7 +86,12 @@ public class OrderService {
 
             variant.setStock(variant.getStock() - item.getQuantity());
         }
-
+        Users user = userRepository.findById(order.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        emailService.sendOrderEmail(
+                user.getEmail(),
+                order,
+                order.getItems());
         order.setStatus("PAID");
     }
     @Transactional(readOnly = true)

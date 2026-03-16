@@ -2,6 +2,7 @@ package com.project.userservice.payment.service;
 
 import com.project.userservice.order.entity.Order;
 import com.project.userservice.order.repository.OrderRepository;
+import com.project.userservice.order.service.OrderService;
 import com.project.userservice.payment.dto.request.PaymentRequest;
 import com.project.userservice.payment.dto.response.PaymentResponse;
 import com.project.userservice.payment.entity.Payment;
@@ -26,6 +27,8 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
+
     private final PayOS payOS;
 
     public String create(Long orderId) throws Exception {
@@ -75,14 +78,12 @@ public class PaymentService {
             // Chỉ cập nhật nếu đang PENDING
             if ("PENDING".equals(payment.getStatus())) {
                 payment.setStatus(status);
-                if ("PAID".equals(status)) {
-                    payment.setPaidAt(LocalDateTime.now());
+                payment.setPaidAt(LocalDateTime.now());
 
                     // Cập nhật order
-                    Order order = payment.getOrder();
-                    order.setStatus("PAID");
-                    orderRepository.save(order);
-                }
+                Order order = payment.getOrder();
+                orderService.updateOrderPaid(order.getOrderId());
+
                 paymentRepository.save(payment);
                 log.info("Payment verified for orderCode: {} with status: {}", orderCode, status);
             }
