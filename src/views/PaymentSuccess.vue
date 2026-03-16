@@ -68,7 +68,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import Breadcrumb from '@/components/layout/Breadcrumb.vue'
-import '@fortawesome/fontawesome-free/css/all.min.css'
 const route = useRoute()
 const router = useRouter()
 
