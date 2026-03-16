@@ -76,8 +76,6 @@ const routes = [
   {
     path: '/orders/:id',
     component: () => import('@/views/OrderDetails.vue'),
-    path: '/orders/:id',
-    component: () => import('@/views/OrderDetails.vue'),
   },
   // router/index.js
   {
