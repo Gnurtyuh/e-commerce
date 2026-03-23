@@ -12,8 +12,11 @@
             </a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-user"></i> {{ session('admin_name', 'Admin') }}
+            <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#" style="gap:8px;">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--primary-bg);display:inline-flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700;font-size:0.75rem;">
+                    {{ strtoupper(substr(session('admin_name', 'A'), 0, 1)) }}
+                </span>
+                <span>{{ session('admin_name', 'Admin') }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <form action="{{ route('admin.logout') }}" method="POST">

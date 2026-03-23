@@ -6,9 +6,14 @@
     </a>
 
     <div class="sidebar">
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+            <div class="image">
+                <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;">
+                    {{ strtoupper(substr(session('admin_name', 'A'), 0, 1)) }}
+                </div>
+            </div>
             <div class="info">
-                <a href="#" class="d-block">{{ session('admin_name', 'Admin User') }}</a>
+                <a href="#" class="d-block" style="font-size:0.875rem;">{{ session('admin_name', 'Admin User') }}</a>
             </div>
         </div>
 

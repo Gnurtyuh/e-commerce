@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\PaginatesFromArray;
 use App\Services\OrderApiService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    use PaginatesFromArray;
+
     protected $orderApi;
 
     public function __construct(OrderApiService $orderApi)
@@ -14,15 +18,17 @@ class OrderController extends Controller
         $this->orderApi = $orderApi;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $orders = $this->orderApi->getAll();
+            $allOrders = $this->orderApi->getAll();
 
-            if(!$orders){
-                $orders = [];
+            if(!$allOrders){
+                $allOrders = [];
             }
+
+            $orders = $this->paginateArray($allOrders, $request);
 
             return view('admin.orders.index', compact('orders'));
 

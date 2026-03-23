@@ -1,24 +1,24 @@
 <div class="mb-3">
     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalImageAdd">
-        <i class="fas fa-upload"></i> Tải lên hình ảnh
+        <i class="fas fa-upload mr-1"></i> Tải lên hình ảnh
     </button>
 </div>
 
 <div class="row">
     @forelse($images as $img)
     <div class="col-md-3 col-sm-4 col-6 mb-4">
-        <div class="card h-100 {{ filter_var($img['is_main'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'border-success shadow' : '' }}">
-            <img src="{{ isset($img['imagePath']) ? asset(ltrim($img['imagePath'], '/')) : '#' }}" class="card-img-top" alt="Product Image" style="object-fit: cover; height: 150px;">
+        <div class="card h-100 {{ filter_var($img['is_main'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'border-success shadow' : '' }}" style="border-radius:var(--radius-lg);overflow:hidden;">
+            <img src="{{ isset($img['imagePath']) ? env('BE_URL') . '/' . ltrim($img['imagePath'], '/') : '#' }}" class="card-img-top" alt="Product Image" style="object-fit: cover; height: 150px;">
             <div class="card-body p-2 text-center">
                 @if(filter_var($img['is_main'] ?? false, FILTER_VALIDATE_BOOLEAN))
-                    <span class="badge badge-success mb-2 d-block">Main Image</span>
+                    <span class="badge badge-success mb-2 d-block">Ảnh chính</span>
                 @else
                     <button class="btn btn-xs btn-outline-success btn-block mb-2 btn-set-main" data-id="{{ $img['imageId'] }}">
                         Đặt làm chính
                     </button>
                 @endif
                 <button class="btn btn-xs btn-outline-danger btn-block btn-delete-image" data-id="{{ $img['imageId'] }}">
-                    <i class="fas fa-trash"></i> Xoá
+                    <i class="fas fa-trash mr-1"></i> Xoá
                 </button>
             </div>
         </div>
@@ -26,8 +26,8 @@
     @empty
     <div class="col-12 mt-3 text-center text-muted">
         <div class="py-4">
-            <i class="fas fa-image fa-3x mb-3 text-light"></i>
-            <p>Chưa có hình ảnh nào được tải lên.</p>
+            <i class="fas fa-image fa-3x mb-3" style="opacity:0.15;color:var(--text-muted);"></i>
+            <p style="color:var(--text-muted);">Chưa có hình ảnh nào được tải lên.</p>
         </div>
     </div>
     @endforelse
@@ -57,13 +57,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Sort Order</label>
+                        <label>Thứ tự sắp xếp</label>
                         <input type="number" name="sort_order" class="form-control" value="0" min="0">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" id="btnUploadImage">Tải lên</button>
+                    <button type="submit" class="btn btn-primary" id="btnUploadImage"><i class="fas fa-upload mr-1"></i> Tải lên</button>
                 </div>
             </form>
         </div>

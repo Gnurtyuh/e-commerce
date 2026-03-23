@@ -2,11 +2,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\PaginatesFromArray;
 use App\Services\CategoryApiService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use PaginatesFromArray;
+
     protected $categoryApi;
 
     public function __construct(CategoryApiService $categoryApi)
@@ -14,16 +17,18 @@ class CategoryController extends Controller
         $this->categoryApi = $categoryApi;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $categories = $this->categoryApi->getAll() ?? [];
+            $allCategories = $this->categoryApi->getAll() ?? [];
         } catch (\Exception $e) {
-            $categories = [];
+            $allCategories = [];
             request()->session()->flash('error', 'Lỗi tải danh mục: ' . $e->getMessage());
         }
-        
-        return view('admin.categories.index', compact('categories'));
+
+        $categories = $this->paginateArray($allCategories, $request);
+
+        return view('admin.categories.index', compact('categories', 'allCategories'));
     }
 
     public function store(Request $request)

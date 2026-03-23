@@ -36,7 +36,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Doanh thu theo tháng</h3>
+                    <h3 class="card-title"><i class="fas fa-chart-bar mr-2" style="color:var(--success);opacity:0.7;"></i> Doanh thu theo tháng</h3>
                 </div>
 
                 <div class="card-body">
@@ -51,7 +51,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Đơn hàng theo ngày</h3>
+                    <h3 class="card-title"><i class="fas fa-chart-line mr-2" style="color:var(--info);opacity:0.7;"></i> Đơn hàng theo ngày</h3>
                 </div>
 
                 <div class="card-body">
@@ -71,7 +71,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">Đơn hàng gần đây</h3>
+                    <h3 class="card-title"><i class="fas fa-clock mr-2" style="color:var(--primary);opacity:0.7;"></i> Đơn hàng gần đây</h3>
                 </div>
 
                 <div class="card-body table-responsive p-0">
@@ -93,7 +93,7 @@
                             @forelse($recentOrders as $o)
                                 <tr>
 
-                                    <td>#{{ $o['orderId'] }}</td>
+                                    <td><span style="font-weight:600;color:var(--text-primary);">#{{ $o['orderId'] }}</span></td>
 
                                     <td class="text-success font-weight-bold">
                                         {{ number_format($o['totalAmount'], 2) }} VND
@@ -103,7 +103,7 @@
                                         <x-status-badge :status="$o['status']" />
                                     </td>
 
-                                    <td>
+                                    <td style="color:var(--text-secondary);">
                                         {{ \Carbon\Carbon::parse($o['createdAt'])->format('Y-m-d H:i') }}
                                     </td>
 
@@ -118,7 +118,8 @@
                             @empty
 
                                 <tr>
-                                    <td colspan="5" class="text-center">
+                                    <td colspan="5" class="text-center" style="padding:32px;color:var(--text-muted);">
+                                        <i class="fas fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:0.3;"></i>
                                         Không tìm thấy đơn đặt hàng gần đây.
                                     </td>
                                 </tr>
@@ -133,8 +134,13 @@
 
         </div>
     </div>
-    <x-stat-card title="Hàng tồn kho thấp" :value="$lowStock" icon="exclamation-triangle" color="danger"
-        url="{{ route('inventory.index') }}" />
+
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <x-stat-card title="Hàng tồn kho thấp" :value="$lowStock" icon="exclamation-triangle" color="danger"
+                url="{{ route('inventory.index') }}" />
+        </div>
+    </div>
 
 @endsection
 
@@ -152,9 +158,26 @@
                 labels: revLabels,
                 datasets: [{
                     label: 'Doanh thu (VND)',
-                    backgroundColor: '#28a745',
+                    backgroundColor: '#10b981',
+                    borderRadius: 6,
+                    borderSkipped: false,
                     data: revData
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Inter', size: 11 } }
+                    },
+                    y: {
+                        grid: { color: '#f3f4f6' },
+                        ticks: { font: { family: 'Inter', size: 11 } }
+                    }
+                }
             }
         });
 
@@ -167,11 +190,30 @@
                 labels: ordLabels,
                 datasets: [{
                     label: 'Đơn hàng',
-                    borderColor: '#17a2b8',
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.08)',
                     data: ordData,
-                    fill: false,
-                    tension: 0.1
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#4f46e5',
+                    borderWidth: 2
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Inter', size: 11 } }
+                    },
+                    y: {
+                        grid: { color: '#f3f4f6' },
+                        ticks: { font: { family: 'Inter', size: 11 } }
+                    }
+                }
             }
         });
     </script>

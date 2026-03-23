@@ -1,12 +1,12 @@
 <div class="mb-3">
     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalVariantAdd">
-        <i class="fas fa-plus"></i> Thêm biến thể
+        <i class="fas fa-plus mr-1"></i> Thêm biến thể
     </button>
 </div>
 
-<div class="table-responsive p-0 border">
-    <table class="table table-striped table-hover text-nowrap align-middle mb-0">
-        <thead class="bg-light">
+<div class="table-responsive p-0">
+    <table class="table table-hover text-nowrap align-middle mb-0">
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Màu sắc</th>
@@ -20,10 +20,10 @@
         <tbody>
             @forelse($variants as $v)
             <tr>
-                <td>{{ $v['variantId'] }}</td>
+                <td style="color:var(--text-muted);">{{ $v['variantId'] }}</td>
                 <td class="font-weight-bold">{{ $v['color'] ?? '-' }}</td>
                 <td>{{ $v['size'] ?? '-' }}</td>
-                <td>{{ $v['sku'] ?? '-' }}</td>
+                <td style="font-family:monospace;font-size:0.8125rem;color:var(--text-secondary);">{{ $v['sku'] ?? '-' }}</td>
                 <td class="text-success font-weight-bold">${{ number_format($v['price'] ?? 0, 2) }}</td>
                 <td>
                     <span class="badge {{ ($v['stock'] ?? 0) > 0 ? 'badge-success' : 'badge-danger' }}">
@@ -34,7 +34,7 @@
                     <button class="btn btn-xs btn-info btn-edit-variant"
                         data-variant='@json($v)'
                         data-toggle="modal" data-target="#modalVariantEdit">
-                        <i class="fas fa-edit"></i> Chỉnh sửa
+                        <i class="fas fa-edit mr-1"></i> Chỉnh sửa
                     </button>
                     <button class="btn btn-xs btn-danger btn-delete-variant"
                         data-id="{{ $v['variantId'] }}">
@@ -44,7 +44,10 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7" class="text-center py-4 text-muted">Không tìm thấy biến thể nào. Thêm một biến thể ở trên.</td>
+                <td colspan="7" class="text-center py-4 text-muted">
+                    <i class="fas fa-tags" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:0.3;"></i>
+                    Không tìm thấy biến thể nào. Thêm một biến thể ở trên.
+                </td>
             </tr>
             @endforelse
         </tbody>
@@ -65,17 +68,17 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Màu sắc</label>
-                            <input type="text" name="color" class="form-control" placeholder="e.g. Red, Blue">
+                            <input type="text" name="color" class="form-control" placeholder="VD: Đỏ, Xanh">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Kích thước</label>
-                            <input type="text" name="size" class="form-control" placeholder="e.g. S, M, XL">
+                            <input type="text" name="size" class="form-control" placeholder="VD: S, M, XL">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Giá ($) <span class="text-danger">*</span></label>
-                            <input type="number" step="0.01" name="price" class="form-control" required>
+                            <input type="number" step="0.01" name="price" class="form-control" required placeholder="0.00">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Số lượng tồn kho <span class="text-danger">*</span></label>
@@ -84,12 +87,12 @@
                     </div>
                     <div class="form-group">
                         <label>SKU</label>
-                        <input type="text" name="sku" class="form-control" placeholder="Unique SKU">
+                        <input type="text" name="sku" class="form-control" placeholder="Mã SKU duy nhất">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" onclick="submitVariantForm('#formVariantAdd', '/admin/products/{{$id}}/variants', 'POST')" class="btn btn-primary">Lưu biến thể</button>
+                    <button type="button" onclick="submitVariantForm('#formVariantAdd', '/admin/products/{{$id}}/variants', 'POST')" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Lưu biến thể</button>
                 </div>
             </form>
         </div>
@@ -135,7 +138,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" onclick="submitVariantForm('#formVariantEdit', '/admin/variants/' + $('#edit_variant_id').val(), 'PUT')" class="btn btn-primary">Update Variant</button>
+                    <button type="button" onclick="submitVariantForm('#formVariantEdit', '/admin/variants/' + $('#edit_variant_id').val(), 'PUT')" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Cập nhật biến thể</button>
                 </div>
             </form>
         </div>

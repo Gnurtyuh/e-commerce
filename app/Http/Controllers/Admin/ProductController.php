@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\PaginatesFromArray;
 use App\Services\ProductApiService;
 use App\Services\CategoryApiService;
 use App\Services\VariantApiService;
@@ -10,10 +11,12 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    use PaginatesFromArray;
+
     protected $productApi, $categoryApi, $variantApi, $imageApi;
 
     public function __construct(
-        ProductApiService $productApi, 
+        ProductApiService $productApi,
         CategoryApiService $categoryApi,
         VariantApiService $variantApi,
         ImageApiService $imageApi
@@ -27,23 +30,37 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            $products = $this->productApi->getAll() ?? [];
+            $allProducts = $this->productApi->getAll() ?? [];
             $categories = $this->categoryApi->getAll() ?? [];
         } catch (\Exception $e) {
-            $products = [];
+            $allProducts = [];
             $categories = [];
             request()->session()->flash('error', 'Lỗi tải dữ liệu: ' . $e->getMessage());
         }
 
-        $categoryId = $request->category_id;
-        $search = strtolower($request->search ?? '');
+        // FIX: đồng bộ tên field
+        $categoryId = $request->input('categoryId');
+        $search = strtolower($request->input('search', ''));
 
+        // Filter theo category
         if ($categoryId) {
-            $products = array_filter($products, fn($p) => $p['categoryId'] == $categoryId);
+            $allProducts = array_filter($allProducts, function ($p) use ($categoryId) {
+                return $p['categoryId'] == $categoryId;
+            });
         }
+
+        // Filter theo search
         if ($search) {
-            $products = array_filter($products, fn($p) => str_contains(strtolower($p['name']), $search) || str_contains(strtolower($p['sku'] ?? ''), $search));
+            $allProducts = array_filter($allProducts, function ($p) use ($search) {
+                return str_contains(strtolower($p['name']), $search) ||
+                       str_contains(strtolower($p['sku'] ?? ''), $search);
+            });
         }
+
+        // reset index cho đẹp (optional nhưng nên có)
+        $allProducts = array_values($allProducts);
+
+        $products = $this->paginateArray($allProducts, $request);
 
         return view('admin.products.index', compact('products', 'categories', 'categoryId', 'search'));
     }
@@ -58,7 +75,7 @@ class ProductController extends Controller
     {
         try {
             $res = $this->productApi->create($request->except('_token'));
-            
+
             // redirect to edit to add variants & images
             $id = $res['productId'] ?? null;
             if ($id) {

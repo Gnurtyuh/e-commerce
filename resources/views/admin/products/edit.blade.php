@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Edit Product')
-@section('page_title', 'Edit Product: ' . ($product['name'] ?? ''))
+@section('title', 'Chỉnh sửa sản phẩm')
+@section('page_title', 'Chỉnh sửa sảm phẩm: ' . ($product['name'] ?? ''))
 
 @section('content')
 
@@ -53,21 +53,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Description</label>
+                        <label>Mô tả</label>
                         <textarea name="description" class="form-control" rows="4">{{ $product['description'] ?? '' }}</textarea>
                     </div>
 
                     <div class="form-group">
-                        <label>Status</label>
+                        <label>Trạng thái</label>
                         <select name="status" class="form-control">
                             <option value="active" {{ ($product['status'] ?? '') == 'active' ? 'selected' : '' }}>Hoạt động</option>
                             <option value="inactive" {{ ($product['status'] ?? '') == 'inactive' ? 'selected' : '' }}>Không hoạt động</option>
                         </select>
                     </div>
 
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Cập nhật sản phẩm</button>
-                        <a href="{{ route('products.index') }}" class="btn btn-default ml-2">Hủy</a>
+                    <div class="mt-4 d-flex" style="gap:8px;">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Cập nhật sản phẩm</button>
+                        <a href="{{ route('products.index') }}" class="btn btn-default">Hủy</a>
                     </div>
                 </form>
             </div>

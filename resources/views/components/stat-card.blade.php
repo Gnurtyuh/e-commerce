@@ -8,5 +8,5 @@
     <div class="icon">
         <i class="fas fa-{{ $icon }}"></i>
     </div>
-    <a href="{{ $url }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    <a href="{{ $url }}" class="small-box-footer">Xem chi tiết <i class="fas fa-arrow-circle-right"></i></a>
 </div>

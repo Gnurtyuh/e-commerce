@@ -6,16 +6,16 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-sitemap mr-1"></i> Cây danh mục</h3>
+        <h3 class="card-title"><i class="fas fa-sitemap mr-2" style="color:var(--primary);opacity:0.7;"></i> Cây danh mục</h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalCategory" id="btnCreateCategory">
-                <i class="fas fa-plus"></i> Thêm Danh Mục
+                <i class="fas fa-plus mr-1"></i> Thêm Danh Mục
             </button>
         </div>
     </div>
         <div class="table-responsive p-0">
-            <table class="table table-striped table-hover text-nowrap align-middle mb-0">
-                <thead class="bg-light">
+            <table class="table table-hover text-nowrap align-middle mb-0">
+                <thead>
                     <tr>
                         {{-- <th style="width: 50px">ID</th> --}}
                         <th>Tên Danh Mục</th>
@@ -30,7 +30,7 @@
                             <td class="font-weight-bold">{{ $cat['name'] }}</td>
                             <td>
                                 @if(!empty($cat['parentId']))
-                                    <span class="badge badge-info text-light">Parent ID {{ $cat['parentId'] }}</span>
+                                    <span class="badge badge-info">Parent ID {{ $cat['parentId'] }}</span>
                                 @else
                                     <span class="badge badge-secondary">Cấp cao nhất</span>
                                 @endif
@@ -41,23 +41,34 @@
                                     data-name="{{ $cat['name'] }}"
                                     data-parent="{{ $cat['parentId'] }}"
                                     data-toggle="modal" data-target="#modalCategory">
-                                    <i class="fas fa-edit"></i> Chỉnh sửa
+                                    <i class="fas fa-edit mr-1"></i> Chỉnh sửa
                                 </button>
                                 <button class="btn btn-xs btn-danger btn-delete"
                                     data-id="{{ $cat['categoryId'] }}"
                                     data-name="{{ $cat['name'] }}">
-                                    <i class="fas fa-trash"></i> Xóa
+                                    <i class="fas fa-trash mr-1"></i> Xóa
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">Không tìm thấy danh mục nào. Click "Add Category" để tạo một danh mục mới.</td>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                <i class="fas fa-folder-open" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:0.3;"></i>
+                                Không tìm thấy danh mục nào. Click "Thêm Danh Mục" để tạo một danh mục mới.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        @if($categories->hasPages())
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <span class="text-muted" style="font-size:0.8125rem;">
+                Hiển thị {{ $categories->firstItem() }}–{{ $categories->lastItem() }} / {{ $categories->total() }} danh mục
+            </span>
+            {{ $categories->links() }}
+        </div>
+        @endif
 </div>
 
 <!-- Modal -->
@@ -75,13 +86,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tên Danh Mục <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="catName" class="form-control" required>
+                        <input type="text" name="name" id="catName" class="form-control" required placeholder="Nhập tên danh mục">
                     </div>
                     <div class="form-group">
                         <label>Danh Mục Cha</label>
                         <select name="parentId" id="catParent" class="form-control">
-                            <option value="">-- None (Top Level) --</option>
-                            @foreach($categories as $cat)
+                            <option value="">-- Không (Cấp cao nhất) --</option>
+                            @foreach($allCategories as $cat)
                                 <option value="{{ $cat['categoryId'] }}">{{ $cat['name'] }}</option>
                             @endforeach
                         </select>
@@ -89,7 +100,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lưu Danh Mục</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Lưu Danh Mục</button>
                 </div>
             </form>
         </div>
@@ -118,7 +129,7 @@
         let name = $(this).data('name');
         let parent = $(this).data('parent');
 
-        $('#modalCategoryLabel').text('Edit Category: ' + name);
+        $('#modalCategoryLabel').text('Chỉnh sửa danh mục: ' + name);
         $('#formCategory').attr('action', '/admin/categories/' + id);
         $('#formMethod').val('PUT');
         $('#catName').val(name);
